@@ -25,7 +25,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     private var taskRunning = false
 
     override public func load() {
-        let allowEmulatorProd = getConfig().getBoolean("allowEmulatorProd", true)
+        let allowEmulatorProd = getConfigValue("allowEmulatorProd") as? Bool ?? true
         if (!allowEmulatorProd && self.isEmulator() && (self.isAppStoreReceiptSandbox() || self.hasEmbeddedMobileProvision())) {
             return
         }
@@ -35,12 +35,12 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         } catch {
             print("\(self.implementation.TAG) Cannot get version native \(currentVersionNative)")
         }
-        autoDeleteFailed = getConfig().getBoolean("autoDeleteFailed", true)
-        autoDeletePrevious = getConfig().getBoolean("autoDeletePrevious", true)
-        updateUrl = getConfig().getString("updateUrl", CapacitorUpdaterPlugin.updateUrlDefault)!
-        autoUpdate = getConfig().getBoolean("autoUpdate", true)
-        appReadyTimeout = getConfig().getInt("appReadyTimeout", 10000)
-        resetWhenUpdate = getConfig().getBoolean("resetWhenUpdate", true)
+        autoDeleteFailed = getConfigValue("autoDeleteFailed") as? Bool ?? true
+        autoDeletePrevious = getConfigValue("autoDeletePrevious") as? Bool ?? true
+        updateUrl = getConfigValue("updateUrl") as? String ?? CapacitorUpdaterPlugin.updateUrlDefault
+        autoUpdate = getConfigValue("autoUpdate") as? Bool ?? true
+        appReadyTimeout = getConfigValue("appReadyTimeout") as? Int ?? 10000
+        resetWhenUpdate = getConfigValue("resetWhenUpdate") as? Bool ?? true
 
         implementation.appId = Bundle.main.bundleIdentifier ?? ""
         implementation.notifyDownload = notifyDownload
@@ -48,7 +48,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         if config?["appId"] != nil {
             implementation.appId = config?["appId"] as! String
         }
-        implementation.statsUrl = getConfig().getString("statsUrl", CapacitorUpdaterPlugin.statsUrlDefault)!
+        implementation.statsUrl = getConfigValue("statsUrl") as? String ?? CapacitorUpdaterPlugin.statsUrlDefault
         if resetWhenUpdate {
             self.cleanupObsoleteVersions()
         }
@@ -284,7 +284,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     @objc func setMultiDelay(_ call: CAPPluginCall) {
-        guard let delayConditionList = call.getValue("delayConditions") else {
+        guard let delayConditionList = call.getObject("delayConditions") else {
             print("\(self.implementation.TAG) setMultiDelay called without delayCondition")
             call.reject("setMultiDelay called without delayCondition")
             return
