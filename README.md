@@ -137,6 +137,9 @@ Capacitor Updator works by unzipping a compiled app bundle to the native device 
 * [`setDelay(...)`](#setdelay)
 * [`cancelDelay()`](#canceldelay)
 * [`getLatest()`](#getlatest)
+* [`setChannel(...)`](#setchannel)
+* [`getChannel()`](#getchannel)
+* [`setCustomId(...)`](#setcustomid)
 * [`addListener('download', ...)`](#addlistenerdownload)
 * [`addListener('noNeedUpdate', ...)`](#addlistenernoneedupdate)
 * [`addListener('updateAvailable', ...)`](#addlistenerupdateavailable)
@@ -345,6 +348,57 @@ Get Latest bundle available from update Url
 **Returns:** <code>Promise&lt;<a href="#latestversion">latestVersion</a>&gt;</code>
 
 **Since:** 4.0.0
+
+--------------------
+
+
+### setChannel(...)
+
+```typescript
+setChannel(options: SetChannelOptions) => Promise<channelRes>
+```
+
+Set Channel for this device
+
+| Param         | Type                                                            | Description                                                                      |
+| ------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setchanneloptions">SetChannelOptions</a></code> | is the {@link <a href="#setchanneloptions">SetChannelOptions</a>} channel to set |
+
+**Returns:** <code>Promise&lt;<a href="#channelres">channelRes</a>&gt;</code>
+
+**Since:** 4.7.0
+
+--------------------
+
+
+### getChannel()
+
+```typescript
+getChannel() => Promise<getChannelRes>
+```
+
+get Channel for this device
+
+**Returns:** <code>Promise&lt;<a href="#getchannelres">getChannelRes</a>&gt;</code>
+
+**Since:** 4.8.0
+
+--------------------
+
+
+### setCustomId(...)
+
+```typescript
+setCustomId(options: SetCustomIdOptions) => Promise<void>
+```
+
+Set Channel for this device
+
+| Param         | Type                                                              | Description                                                                         |
+| ------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setcustomidoptions">SetCustomIdOptions</a></code> | is the {@link <a href="#setcustomidoptions">SetCustomIdOptions</a>} customId to set |
+
+**Since:** 4.9.0
 
 --------------------
 
@@ -604,6 +658,38 @@ removeAllListeners() => Promise<void>
 | **`message`** | <code>string</code>  |                         |       |
 | **`old`**     | <code>string</code>  |                         |       |
 | **`url`**     | <code>string</code>  |                         |       |
+
+
+#### channelRes
+
+| Prop         | Type                | Description                   | Since |
+| ------------ | ------------------- | ----------------------------- | ----- |
+| **`status`** | <code>string</code> | Current status of set channel | 4.7.0 |
+| **`error`**  | <code>any</code>    |                               |       |
+
+
+#### SetChannelOptions
+
+| Prop          | Type                |
+| ------------- | ------------------- |
+| **`chhanel`** | <code>string</code> |
+
+
+#### getChannelRes
+
+| Prop           | Type                 | Description                   | Since |
+| -------------- | -------------------- | ----------------------------- | ----- |
+| **`channel`**  | <code>string</code>  | Current status of get channel | 4.8.0 |
+| **`error`**    | <code>any</code>     |                               |       |
+| **`status`**   | <code>string</code>  |                               |       |
+| **`allowSet`** | <code>boolean</code> |                               |       |
+
+
+#### SetCustomIdOptions
+
+| Prop          | Type                |
+| ------------- | ------------------- |
+| **`chhanel`** | <code>string</code> |
 
 
 #### PluginListenerHandle

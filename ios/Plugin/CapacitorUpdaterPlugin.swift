@@ -11,6 +11,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
     static let updateUrlDefault = "https://api.capgo.app/updates"
     static let statsUrlDefault = "https://api.capgo.app/stats"
+    static let channelUrlDefault = "https://api.capgo.app/channel_self"
     let DELAY_CONDITION_PREFERENCES = ""
     private var updateUrl = ""
     private var statsUrl = ""
@@ -49,6 +50,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
             implementation.appId = config?["appId"] as! String
         }
         implementation.statsUrl = getConfigValue("statsUrl") as? String ?? CapacitorUpdaterPlugin.statsUrlDefault
+        implementation.channelUrl = getConfigValue("channelUrl") as? String ?? CapacitorUpdaterPlugin.CapacitorUpdaterPlugin.channelUrlDefault
         if resetWhenUpdate {
             self.cleanupObsoleteVersions()
         }
@@ -234,8 +236,43 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     @objc func getLatest(_ call: CAPPluginCall) {
-        let res = self.implementation.getLatest(url: URL(string: self.updateUrl)!)
-        call.resolve(res.toDict())
+        DispatchQueue.global(qos: .background).async {
+            let res = self.implementation.getLatest(url: URL(string: self.updateUrl)!)
+            call.resolve(res.toDict())
+        }
+    }
+
+    @objc func setChannel(_ call: CAPPluginCall) {
+        guard let channel = call.getString("channel") else {
+            print("\(self.implementation.TAG) setChannel called without channel")
+            call.reject("setChannel called without channel")
+            return
+        }
+        DispatchQueue.global(qos: .background).async {
+            guard let res = self.implementation.setChannel(channel: channel) else {
+                call.reject("Cannot setChannel")
+                return
+            }
+            call.resolve(res.toDict())
+        }
+    }
+
+    @objc func getChannel(_ call: CAPPluginCall) {
+        DispatchQueue.global(qos: .background).async {
+            guard let res = self.implementation.getChannel() else {
+                call.reject("Cannot getChannel")
+                return
+            }
+            call.resolve(res.toDict())
+        }
+    }
+    @objc func setCustomId(_ call: CAPPluginCall) {
+        guard let customId = call.getString("customId") else {
+            print("\(self.implementation.TAG) setCustomId called without customId")
+            call.reject("setCustomId called without customId")
+            return
+        }
+        self.implementation.customId = customId
     }
 
     @objc func _reset(toLastSuccessful: Bool) -> Bool {

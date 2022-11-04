@@ -16,6 +16,50 @@ extension Date {
         return Calendar.current.date(byAdding: .minute, value: minutes, to: self)!
     }
 }
+struct SetChannelDec: Decodable {
+    let status: String?
+    let error: String?
+}
+public class SetChannel: NSObject {
+    var status: String = ""
+    var error: String = ""
+}
+extension SetChannel {
+    func toDict() -> [String: Any] {
+        var dict = [String: Any]()
+        let otherSelf = Mirror(reflecting: self)
+        for child in otherSelf.children {
+            if let key = child.label {
+                dict[key] = child.value
+            }
+        }
+        return dict
+    }
+}
+struct GetChannelDec: Decodable {
+    let channel: String?
+    let status: String?
+    let error: String?
+    let allowSet: Bool?
+}
+public class GetChannel: NSObject {
+    var channel: String = ""
+    var status: String = ""
+    var error: String = ""
+    var allowSet: Bool = true
+}
+extension GetChannel {
+    func toDict() -> [String: Any] {
+        var dict = [String: Any]()
+        let otherSelf = Mirror(reflecting: self)
+        for child in otherSelf.children {
+            if let key = child.label {
+                dict[key] = child.value
+            }
+        }
+        return dict
+    }
+}
 struct AppVersionDec: Decodable {
     let version: String?
     let checksum: String?
@@ -148,8 +192,10 @@ extension CustomError: LocalizedError {
 
     public let TAG = "✨  Capacitor-updater:"
     public let CAP_SERVER_PATH = "serverBasePath"
-    public let pluginVersion = "4.6.3"
+    public var customId = ""
+    public let pluginVersion = "4.9.0"
     public var statsUrl = ""
+    public var channelUrl = ""
     public var appId = ""
     public var deviceID = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
@@ -235,6 +281,7 @@ extension CustomError: LocalizedError {
             "platform": "ios",
             "device_id": self.deviceID,
             "app_id": self.appId,
+            "custom_id": self.customId,
             "version_build": self.versionName,
             "version_code": self.versionCode,
             "version_os": self.versionOs,
@@ -457,6 +504,87 @@ extension CustomError: LocalizedError {
         self.setBundleStatus(id: bundle.getId(), status: BundleStatus.ERROR)
     }
 
+    func setChannel(channel: String) -> SetChannel? {
+        if self.channelUrl == "" {
+            return nil
+        }
+        let semaphore = DispatchSemaphore(value: 0)
+        let setChannel = SetChannel()
+        let parameters: [String: String] = [
+            "platform": "ios",
+            "device_id": self.deviceID,
+            "custom_id": self.customId,
+            "version_name": self.getCurrentBundle().getVersionName(),
+            "version_build": self.versionName,
+            "version_code": self.versionCode,
+            "version_os": self.versionOs,
+            "plugin_version": self.pluginVersion,
+            "channel": channel,
+            "app_id": self.appId
+        ]
+        let request = AF.request(self.channelUrl, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+
+        request.validate().responseDecodable(of: SetChannelDec.self) { response in
+            switch response.result {
+            case .success:
+                if let status = response.value?.status {
+                    setChannel.status = status
+                }
+                if let error = response.value?.error {
+                    setChannel.error = error
+                }
+            case let .failure(error):
+                print("\(self.TAG) Error set Channel", error )
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return setChannel
+    }
+
+    func getChannel() -> GetChannel? {
+        if self.channelUrl == "" {
+            return nil
+        }
+        let semaphore = DispatchSemaphore(value: 0)
+        let getChannel = GetChannel()
+        let parameters: [String: String] = [
+            "platform": "ios",
+            "device_id": self.deviceID,
+            "custom_id": self.customId,
+            "version_name": self.getCurrentBundle().getVersionName(),
+            "version_build": self.versionName,
+            "version_code": self.versionCode,
+            "version_os": self.versionOs,
+            "plugin_version": self.pluginVersion,
+            "app_id": self.appId
+        ]
+        let request = AF.request(self.channelUrl, method: .put, parameters: parameters, encoder: JSONParameterEncoder.default)
+
+        request.validate().responseDecodable(of: GetChannelDec.self) { response in
+            switch response.result {
+            case .success:
+                if let status = response.value?.status {
+                    getChannel.status = status
+                }
+                if let error = response.value?.error {
+                    getChannel.error = error
+                }
+                if let channel = response.value?.channel {
+                    getChannel.channel = channel
+                }
+                if let allowSet = response.value?.allowSet {
+                    getChannel.allowSet = allowSet
+                }
+            case let .failure(error):
+                print("\(self.TAG) Error get Channel", error )
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return getChannel
+    }
+
     func sendStats(action: String, versionName: String) {
         if self.statsUrl == "" {
             return
@@ -465,6 +593,7 @@ extension CustomError: LocalizedError {
             "platform": "ios",
             "action": action,
             "device_id": self.deviceID,
+            "custom_id": self.customId,
             "version_name": versionName,
             "version_build": self.versionName,
             "version_code": self.versionCode,

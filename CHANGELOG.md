@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.9.0](https://github.com/Cap-go/capacitor-updater/compare/4.8.1...4.9.0) (2022-11-04)
+
+
+### Features
+
+* add setCustomId method ([8864704](https://github.com/Cap-go/capacitor-updater/commit/8864704904232ac30bc862d68d9eb31e4504c4d4))
+
+
+### Bug Fixes
+
+* return type getChannel ([c2bf394](https://github.com/Cap-go/capacitor-updater/commit/c2bf394653382e3c486a832d80cff0f2220735b9))
+
+### [4.8.1](https://github.com/Cap-go/capacitor-updater/compare/4.8.0...4.8.1) (2022-11-03)
+
+
+### Bug Fixes
+
+* readme ([ceedf2d](https://github.com/Cap-go/capacitor-updater/commit/ceedf2d2c3f517f59930dd3f0a57a877c4459d55))
+
+## [4.8.0](https://github.com/Cap-go/capacitor-updater/compare/4.7.2...4.8.0) (2022-11-03)
+
+
+### Features
+
+* add getchannel ([52fb699](https://github.com/Cap-go/capacitor-updater/commit/52fb699b0af418a1503589bb708a83df808d6bb1))
+
+### [4.7.2](https://github.com/Cap-go/capacitor-updater/compare/4.7.1...4.7.2) (2022-11-03)
+
+
+### Bug Fixes
+
+* definitions ([47419d6](https://github.com/Cap-go/capacitor-updater/commit/47419d6981e33fb4a398115f59b38d76ffe70c28))
+* readme ([cddbf50](https://github.com/Cap-go/capacitor-updater/commit/cddbf5062285221e773bead889f2feb78049bfe2))
+
+### [4.7.1](https://github.com/Cap-go/capacitor-updater/compare/4.7.0...4.7.1) (2022-11-03)
+
+## [4.7.0](https://github.com/Cap-go/capacitor-updater/compare/4.6.3...4.7.0) (2022-11-03)
+
+
+### Features
+
+* add setChannel method ([4cbd77d](https://github.com/Cap-go/capacitor-updater/commit/4cbd77d34b93b8881e0817e0e993a6b76070d84c))
+
 ### [4.6.3](https://github.com/Cap-go/capacitor-updater/compare/4.6.2...4.6.3) (2022-11-02)
 
 
