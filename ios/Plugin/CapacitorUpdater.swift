@@ -60,20 +60,20 @@ extension GetChannel {
         return dict
     }
 }
-struct InfoObject : Codable {
-    let platform : String?
-    let device_id : String?
-    let app_id : String?
-    let custom_id : String?
-    let version_build : String?
-    let version_code : String?
-    let version_os : String?
-    let version_name : String?
-    let plugin_version : String?
-    let is_emulator : Bool?
-    let is_prod : Bool?
-    var action : String?
-    var channel : String?
+struct InfoObject: Codable {
+    let platform: String?
+    let device_id: String?
+    let app_id: String?
+    let custom_id: String?
+    let version_build: String?
+    let version_code: String?
+    let version_os: String?
+    let version_name: String?
+    let plugin_version: String?
+    let is_emulator: Bool?
+    let is_prod: Bool?
+    var action: String?
+    var channel: String?
 }
 struct AppVersionDec: Decodable {
     let version: String?
@@ -208,7 +208,7 @@ extension CustomError: LocalizedError {
     public let TAG = "✨  Capacitor-updater:"
     public let CAP_SERVER_PATH = "serverBasePath"
     public var customId = ""
-    public let pluginVersion = "4.10.1"
+    public let pluginVersion = "4.10.4"
     public var statsUrl = ""
     public var channelUrl = ""
     public var appId = ""
@@ -236,9 +236,9 @@ extension CustomError: LocalizedError {
         }
         return false
     }
-    
+
     private func isAppStoreReceiptSandbox() -> Bool {
-        
+
         if isEmulator() {
             return false
         } else {
@@ -254,9 +254,9 @@ extension CustomError: LocalizedError {
 
     private func isEmulator() -> Bool {
         #if targetEnvironment(simulator)
-            return true
+        return true
         #else
-            return false
+        return false
         #endif
     }
     // Persistent path /var/mobile/Containers/Data/Application/8C0C07BE-0FD3-4FD4-B7DF-90A88E12B8C3/Library/NoCloud/ionic_built_snapshots/FOLDER

@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.10.4](https://github.com/Cap-go/capacitor-updater/compare/4.10.3...4.10.4) (2022-11-11)
+
+
+### Bug Fixes
+
+* ci ([5c4af0f](https://github.com/Cap-go/capacitor-updater/commit/5c4af0f9de377e2d3f1cf14654439796f9bccb79))
+
+### [4.10.3](https://github.com/Cap-go/capacitor-updater/compare/4.10.2...4.10.3) (2022-11-11)
+
+
+### Bug Fixes
+
+* update to capacitor v4 al dep + CI fail in cannot build ([3bd3cb4](https://github.com/Cap-go/capacitor-updater/commit/3bd3cb42cfdad5088b560ea4fedd6a0dc161a041))
+
+### [4.10.2](https://github.com/Cap-go/capacitor-updater/compare/4.10.1...4.10.2) (2022-11-11)
+
+
+### Bug Fixes
+
+* upgrade deps ([27abf20](https://github.com/Cap-go/capacitor-updater/commit/27abf20aa9658598366eb4cba391ff38df3464d2))
+
 ### [4.10.1](https://github.com/Cap-go/capacitor-updater/compare/4.10.0...4.10.1) (2022-11-10)
 
 ## [4.10.0](https://github.com/Cap-go/capacitor-updater/compare/4.9.1...4.10.0) (2022-11-10)
