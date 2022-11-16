@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.11.3](https://github.com/Cap-go/capacitor-updater/compare/4.11.2...4.11.3) (2022-11-15)
+
+
+### Bug Fixes
+
+* build issue android ([20ba77f](https://github.com/Cap-go/capacitor-updater/commit/20ba77f548eb03e1460dee30a2afefbb1aea2729))
+
+### [4.11.2](https://github.com/Cap-go/capacitor-updater/compare/4.11.1...4.11.2) (2022-11-15)
+
+
+### Bug Fixes
+
+* build android ([7f030b4](https://github.com/Cap-go/capacitor-updater/commit/7f030b4a6b2fdcc4c30745e0bd6ad943be6085a3))
+
+### [4.11.1](https://github.com/Cap-go/capacitor-updater/compare/4.11.0...4.11.1) (2022-11-15)
+
+
+### Bug Fixes
+
+* android build ([217241b](https://github.com/Cap-go/capacitor-updater/commit/217241bd1d3258da1c1cde8f259aedab58384baa))
+
+## [4.11.0](https://github.com/Cap-go/capacitor-updater/compare/4.10.4...4.11.0) (2022-11-15)
+
+
+### Features
+
+* add download_complete and download_% events ([0ed8022](https://github.com/Cap-go/capacitor-updater/commit/0ed80222ecc9fc7656399cddf744f032d7cf3944))
+
 ### [4.10.4](https://github.com/Cap-go/capacitor-updater/compare/4.10.3...4.10.4) (2022-11-11)
 
 

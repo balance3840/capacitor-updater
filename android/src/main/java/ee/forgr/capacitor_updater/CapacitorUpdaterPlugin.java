@@ -145,11 +145,14 @@ public class CapacitorUpdaterPlugin extends Plugin implements Application.Activi
         try {
             final JSObject ret = new JSObject();
             ret.put("percent", percent);
-            JSObject bundle = this.implementation.getBundleInfo(id).toJSON();
-            ret.put("bundle", bundle);
+            final BundleInfo bundleInfo = this.implementation.getBundleInfo(id);
+            ret.put("bundle", bundleInfo.toJSON());
             this.notifyListeners("download", ret);
             if (percent == 100) {
-                this.notifyListeners("downloadComplete", bundle);
+                this.notifyListeners("downloadComplete", bundleInfo.toJSON());
+                this.implementation.sendStats("download_complete", bundleInfo.getVersionName());
+            } else if (percent % 10 == 0) {
+                this.implementation.sendStats("download_" + percent, bundleInfo.getVersionName());
             }
         } catch (final Exception e) {
             Log.e(CapacitorUpdater.TAG, "Could not notify listeners", e);
