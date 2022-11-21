@@ -52,7 +52,7 @@ public class CapacitorUpdater {
     private static final String bundleDirectory = "versions";
 
     public static final String TAG = "Capacitor-updater";
-    public static final String pluginVersion = "4.11.4";
+    public static final String pluginVersion = "4.11.8";
 
     public SharedPreferences.Editor editor;
     public SharedPreferences prefs;
@@ -119,7 +119,7 @@ public class CapacitorUpdater {
     }
 
     private File unzip(final String id, final File zipFile, final String dest) throws IOException {
-        final File targetDirectory = new File(this.documentsDir, dest);
+        final File targetDirectory = new File(this.documentsDir, Paths.get(dest).normalize().toString());
         final ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)));
         try {
             int count;
@@ -132,7 +132,7 @@ public class CapacitorUpdater {
 
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                final File file = new File(targetDirectory, entry.getName());
+                final File file = new File(targetDirectory, Paths.get(entry.getName()).normalize().toString());
                 final String canonicalPath = file.getCanonicalPath();
                 final String canonicalDir = (new File(String.valueOf(targetDirectory))).getCanonicalPath();
                 final File dir = entry.isDirectory() ? file : file.getParentFile();
