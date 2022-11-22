@@ -208,7 +208,7 @@ extension CustomError: LocalizedError {
     public let TAG = "✨  Capacitor-updater:"
     public let CAP_SERVER_PATH = "serverBasePath"
     public var customId = ""
-    public let pluginVersion = "4.11.8"
+    public let pluginVersion = "4.11.12"
     public var statsUrl = ""
     public var channelUrl = ""
     public var appId = ""
@@ -474,6 +474,7 @@ extension CustomError: LocalizedError {
         } else {
             self.saveBundleInfo(id: id, bundle: deleted.setStatus(status: BundleStatus.DELETED.localizedString))
         }
+        print("\(self.TAG) bundle delete \(deleted.getVersionName())")
         self.sendStats(action: "delete", versionName: deleted.getVersionName())
         return true
     }

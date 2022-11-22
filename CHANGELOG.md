@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.11.12](https://github.com/Cap-go/capacitor-updater/compare/4.11.11...4.11.12) (2022-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.android.tools.build:gradle to v7.3.1 ([cf1c18a](https://github.com/Cap-go/capacitor-updater/commit/cf1c18a593479e34da6e4b2eb207ac08b5da9334))
+
+### [4.11.11](https://github.com/Cap-go/capacitor-updater/compare/4.11.10...4.11.11) (2022-11-22)
+
+
+### Bug Fixes
+
+* path issue ([9b44ac8](https://github.com/Cap-go/capacitor-updater/commit/9b44ac833e79db25654ad44cc8b83321a531d937))
+
+### [4.11.10](https://github.com/Cap-go/capacitor-updater/compare/4.11.9...4.11.10) (2022-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.code.gson:gson to v2.10 ([0ba9c3e](https://github.com/Cap-go/capacitor-updater/commit/0ba9c3ee2e2d485a79b7f11e414ffaf8ba930236))
+
+### [4.11.9](https://github.com/Cap-go/capacitor-updater/compare/4.11.8...4.11.9) (2022-11-22)
+
+
+### Bug Fixes
+
+* build script +logs ([a174a59](https://github.com/Cap-go/capacitor-updater/commit/a174a596144a81773d9f4b03e3a0905eaa5ef8ff))
+
 ### [4.11.8](https://github.com/Cap-go/capacitor-updater/compare/4.11.7...4.11.8) (2022-11-21)
 
 ### [4.11.7](https://github.com/Cap-go/capacitor-updater/compare/4.11.6...4.11.7) (2022-11-17)
