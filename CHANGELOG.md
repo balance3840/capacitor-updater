@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.12.7](https://github.com/Cap-go/capacitor-updater/compare/4.12.6...4.12.7) (2022-11-24)
+
+
+### Bug Fixes
+
+* build and use pnpm ([d8a9462](https://github.com/Cap-go/capacitor-updater/commit/d8a94620cc398f340b5db8541e15bbe8a4dd7a92))
+
+### [4.12.6](https://github.com/Cap-go/capacitor-updater/compare/4.12.5...4.12.6) (2022-11-24)
+
+
+### Bug Fixes
+
+* paddding ([705d529](https://github.com/Cap-go/capacitor-updater/commit/705d52908f6b7cc8fafbb6803b53e5b271bd6605))
+
+### [4.12.5](https://github.com/Cap-go/capacitor-updater/compare/4.12.4...4.12.5) (2022-11-24)
+
+
+### Bug Fixes
+
+* RSA settings ([c570725](https://github.com/Cap-go/capacitor-updater/commit/c570725d696ce6c8d013b08535829db5423ec586))
+
+### [4.12.4](https://github.com/Cap-go/capacitor-updater/compare/4.12.3...4.12.4) (2022-11-24)
+
+
+### Bug Fixes
+
+* update deps ([1f0339c](https://github.com/Cap-go/capacitor-updater/commit/1f0339c17817a733720ece5c329dc3015d5b7b41))
+
+### [4.12.3](https://github.com/Cap-go/capacitor-updater/compare/4.12.2...4.12.3) (2022-11-24)
+
+### [4.12.2](https://github.com/Cap-go/capacitor-updater/compare/4.12.1...4.12.2) (2022-11-24)
+
+
+### Bug Fixes
+
+* native build issues ([05da8b2](https://github.com/Cap-go/capacitor-updater/commit/05da8b2f7d9331c1729d125fd99826dd21b76b8c))
+
+### [4.12.1](https://github.com/Cap-go/capacitor-updater/compare/4.12.0...4.12.1) (2022-11-24)
+
+
+### Bug Fixes
+
+* lint issue ([0275c79](https://github.com/Cap-go/capacitor-updater/commit/0275c7979861617404b1dbb102d81d56b9394af2))
+
 ## [4.12.0](https://github.com/Cap-go/capacitor-updater/compare/4.11.12...4.12.0) (2022-11-23)
 
 
