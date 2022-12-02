@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.13.2](https://github.com/Cap-go/capacitor-updater/compare/4.13.1...4.13.2) (2022-12-02)
+
+
+### Bug Fixes
+
+* lint issue ([e91d198](https://github.com/Cap-go/capacitor-updater/commit/e91d19824007b786eef57e03eda77745c852a65c))
+
+### [4.13.1](https://github.com/Cap-go/capacitor-updater/compare/4.13.0...4.13.1) (2022-12-02)
+
+
+### Bug Fixes
+
+* remove old useless lib ([84c24e4](https://github.com/Cap-go/capacitor-updater/commit/84c24e44a31ca330b9329a5a24139d72f90857f9))
+
+## [4.13.0](https://github.com/Cap-go/capacitor-updater/compare/4.12.11...4.13.0) (2022-12-02)
+
+
+### Features
+
+* add android decrypt RSA AES ([946354e](https://github.com/Cap-go/capacitor-updater/commit/946354ee8e2429b95e8bce38de6d40db00453c6f))
+* end-to-end encryption work on ios ([5b1c414](https://github.com/Cap-go/capacitor-updater/commit/5b1c414aafb2704523ab0e4ac9a672b9f397684c))
+
+
+### Bug Fixes
+
+* lint issue ([640a0c3](https://github.com/Cap-go/capacitor-updater/commit/640a0c3a0f790ea5bcb437306c8f7d6a6002f6d6))
+
 ### [4.12.11](https://github.com/Cap-go/capacitor-updater/compare/4.12.10...4.12.11) (2022-12-02)
 
 
