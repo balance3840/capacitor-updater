@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.14.2](https://github.com/Cap-go/capacitor-updater/compare/4.14.1...4.14.2) (2022-12-10)
+
+
+### Bug Fixes
+
+* logs issue volley ([cc8a9af](https://github.com/Cap-go/capacitor-updater/commit/cc8a9af30c93d55beed1719d3583b14b428b6374))
+
+### [4.14.1](https://github.com/Cap-go/capacitor-updater/compare/4.14.0...4.14.1) (2022-12-10)
+
+
+### Bug Fixes
+
+* format android ([5a21088](https://github.com/Cap-go/capacitor-updater/commit/5a210884e8ac018730582b861fb028d396fd835f))
+
+## [4.14.0](https://github.com/Cap-go/capacitor-updater/compare/4.13.8...4.14.0) (2022-12-10)
+
+
+### Features
+
+* add background download android ([0d4aac3](https://github.com/Cap-go/capacitor-updater/commit/0d4aac3d89a251b1f8905e7df591295c3bf7aa00))
+
+### [4.13.8](https://github.com/Cap-go/capacitor-updater/compare/4.13.7...4.13.8) (2022-12-10)
+
+
+### Bug Fixes
+
+* put bg download in separe method ([c85adf3](https://github.com/Cap-go/capacitor-updater/commit/c85adf3529184f2f45672d733fa5bf395ad50889))
+
+### [4.13.7](https://github.com/Cap-go/capacitor-updater/compare/4.13.6...4.13.7) (2022-12-09)
+
+
+### Bug Fixes
+
+* ios use proper background task ([ceaa7ca](https://github.com/Cap-go/capacitor-updater/commit/ceaa7caacde7fd80028aa7c82acecd2ee3b7c877))
+
+### [4.13.6](https://github.com/Cap-go/capacitor-updater/compare/4.13.5...4.13.6) (2022-12-07)
+
+
+### Bug Fixes
+
+* definitions for errors ([100b021](https://github.com/Cap-go/capacitor-updater/commit/100b0214a11b92e66182a3feb04001bc6ef0e3a2))
+
 ### [4.13.5](https://github.com/Cap-go/capacitor-updater/compare/4.13.4...4.13.5) (2022-12-06)
 
 

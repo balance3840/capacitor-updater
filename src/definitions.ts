@@ -113,6 +113,7 @@ export interface channelRes {
    */
   status: string;
   error?: any;
+  message?: any;
 }
 
 export interface getChannelRes {
@@ -123,6 +124,7 @@ export interface getChannelRes {
    */
   channel?: string;
   error?: any;
+  message?: any;
   status?: string;
   allowSet?: boolean;
 }
@@ -179,6 +181,7 @@ export interface latestVersion {
   version: string;
   major?: boolean;
   message?: string;
+  error?: string;
   old?: string;
   url?: string;
 }

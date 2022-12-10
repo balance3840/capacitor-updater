@@ -9,21 +9,22 @@ import Version
 @objc(CapacitorUpdaterPlugin)
 public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
-    static let updateUrlDefault: String = "https://api.capgo.app/updates"
-    static let statsUrlDefault: String = "https://api.capgo.app/stats"
-    static let channelUrlDefault: String = "https://api.capgo.app/channel_self"
-    let DELAY_CONDITION_PREFERENCES: String = ""
-    private var updateUrl: String = ""
-    private var statsUrl: String = ""
+    static let updateUrlDefault = "https://api.capgo.app/updates"
+    static let statsUrlDefault = "https://api.capgo.app/stats"
+    static let channelUrlDefault = "https://api.capgo.app/channel_self"
+    let DELAY_CONDITION_PREFERENCES = ""
+    private var updateUrl = ""
+    private var statsUrl = ""
+    private var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var currentVersionNative: Version = "0.0.0"
-    private var autoUpdate: Bool = false
-    private var appReadyTimeout: Int = 10000
+    private var autoUpdate = false
+    private var appReadyTimeout = 10000
     private var appReadyCheck: DispatchWorkItem?
-    private var resetWhenUpdate: Bool = true
-    private var autoDeleteFailed: Bool = false
-    private var autoDeletePrevious: Bool = false
+    private var resetWhenUpdate = true
+    private var autoDeleteFailed = false
+    private var autoDeletePrevious = false
     private var backgroundWork: DispatchWorkItem?
-    private var taskRunning: Bool = false
+    private var taskRunning = false
 
     override public func load() {
         print("\(self.implementation.TAG) init for device \(self.implementation.deviceID)")
@@ -50,7 +51,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         if resetWhenUpdate {
             self.cleanupObsoleteVersions()
         }
-        let nc: NotificationCenter = NotificationCenter.default
+        let nc = NotificationCenter.default
         nc.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         nc.addObserver(self, selector: #selector(appMovedToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         nc.addObserver(self, selector: #selector(appKilled), name: UIApplication.willTerminateNotification, object: nil)
@@ -347,7 +348,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     private func _checkCancelDelay(killed: Bool) {
-        let delayUpdatePreferences: String = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
+        let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
         let delayConditionList: [DelayCondition] = fromJsonArr(json: delayUpdatePreferences).map { obj -> DelayCondition in
             let kind: String = obj.value(forKey: "kind") as! String
             let value: String? = obj.value(forKey: "value") as? String
@@ -465,92 +466,110 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         self.appReadyCheck = nil
     }
 
+    func endBackGroundTask() {
+        UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+        self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+    }
+
+    func backgroundDownload() {
+        DispatchQueue.global(qos: .background).async {
+            self.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Finish Download Tasks") {
+                // End the task if time expires.
+                self.endBackGroundTask()
+            }
+            print("\(self.implementation.TAG) Check for update via \(self.updateUrl)")
+            let url = URL(string: self.updateUrl)!
+            let res = self.implementation.getLatest(url: url)
+            let current = self.implementation.getCurrentBundle()
+
+            if (res.message) != nil {
+                print("\(self.implementation.TAG) message \(res.message ?? "")")
+                if res.major == true {
+                    self.notifyListeners("majorAvailable", data: ["version": res.version])
+                }
+                self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
+                self.endBackGroundTask()
+                return
+            }
+            let sessionKey = res.sessionKey ?? ""
+            guard let downloadUrl = URL(string: res.url) else {
+                print("\(self.implementation.TAG) Error no url or wrong format")
+                self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
+                self.endBackGroundTask()
+                return
+            }
+            let latestVersionName = res.version
+            if latestVersionName != "" && current.getVersionName() != latestVersionName {
+                let latest = self.implementation.getBundleInfoByVersionName(version: latestVersionName)
+                if latest != nil {
+                    if latest!.isErrorStatus() {
+                        print("\(self.implementation.TAG) Latest version already exists, and is in error state. Aborting update.")
+                        self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
+                        self.endBackGroundTask()
+                        return
+                    }
+                    if latest!.isDownloaded() {
+                        print("\(self.implementation.TAG) Latest version already exists and download is NOT required. Update will occur next time app moves to background.")
+                        self.notifyListeners("updateAvailable", data: ["bundle": current.toJSON()])
+                        _ = self.implementation.setNextBundle(next: latest!.getId())
+                        self.endBackGroundTask()
+                        return
+                    }
+                    if latest!.isDeleted() {
+                        print("\(self.implementation.TAG) Latest bundle already exists and will be deleted, download will overwrite it.")
+                        let res = self.implementation.delete(id: latest!.getId(), removeInfo: true)
+                        if !res {
+                            print("\(self.implementation.TAG) Delete version deleted: \(latest!.toString())")
+                        } else {
+                            print("\(self.implementation.TAG) Failed to delete failed bundle: \(latest!.toString())")
+                        }
+                    }
+                }
+
+                do {
+                    print("\(self.implementation.TAG) New bundle: \(latestVersionName) found. Current is: \(current.getVersionName()). Update will occur next time app moves to background.")
+                    let next = try self.implementation.download(url: downloadUrl, version: latestVersionName, sessionKey: sessionKey)
+                    if res.checksum != "" && next.getChecksum() != res.checksum {
+                        print("\(self.implementation.TAG) Error checksum", next.getChecksum(), res.checksum)
+                        self.implementation.sendStats(action: "checksum_fail", versionName: next.getVersionName())
+                        let resDel = self.implementation.delete(id: next.getId())
+                        if !resDel {
+                            print("\(self.implementation.TAG) Delete failed, id \(next.getId()) doesn't exist")
+                        }
+                        self.endBackGroundTask()
+                        return
+                    }
+                    self.notifyListeners("updateAvailable", data: ["bundle": next.toJSON()])
+                    _ = self.implementation.setNextBundle(next: next.getId())
+                } catch {
+                    print("\(self.implementation.TAG) Error downloading file", error.localizedDescription)
+                    let current: BundleInfo = self.implementation.getCurrentBundle()
+                    self.implementation.sendStats(action: "download_fail", versionName: current.getVersionName())
+                    self.notifyListeners("downloadFailed", data: ["version": latestVersionName])
+                    self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
+                }
+            } else {
+                print("\(self.implementation.TAG) No need to update, \(current.getId()) is the latest bundle.")
+                self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
+            }
+            self.endBackGroundTask()
+        }
+    }
+
     @objc func appMovedToForeground() {
         if backgroundWork != nil && taskRunning {
             backgroundWork!.cancel()
             print("\(self.implementation.TAG) Background Timer Task canceled, Activity resumed before timer completes")
         }
         if self._isAutoUpdateEnabled() {
-            DispatchQueue.global(qos: .background).async {
-                print("\(self.implementation.TAG) Check for update via \(self.updateUrl)")
-                let url: URL = URL(string: self.updateUrl)!
-                let res = self.implementation.getLatest(url: url)
-                let current = self.implementation.getCurrentBundle()
-
-                if (res.message) != nil {
-                    print("\(self.implementation.TAG) message \(res.message ?? "")")
-                    if res.major == true {
-                        self.notifyListeners("majorAvailable", data: ["version": res.version])
-                    }
-                    self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
-                    return
-                }
-                let sessionKey = res.sessionKey ?? ""
-                guard let downloadUrl = URL(string: res.url) else {
-                    print("\(self.implementation.TAG) Error no url or wrong format")
-                    self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
-                    return
-                }
-                let latestVersionName = res.version
-                if latestVersionName != "" && current.getVersionName() != latestVersionName {
-                    let latest = self.implementation.getBundleInfoByVersionName(version: latestVersionName)
-                    if latest != nil {
-                        if latest!.isErrorStatus() {
-                            print("\(self.implementation.TAG) Latest version already exists, and is in error state. Aborting update.")
-                            self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
-                            return
-                        }
-                        if latest!.isDownloaded() {
-                            print("\(self.implementation.TAG) Latest version already exists and download is NOT required. Update will occur next time app moves to background.")
-                            self.notifyListeners("updateAvailable", data: ["bundle": current.toJSON()])
-                            _ = self.implementation.setNextBundle(next: latest!.getId())
-                            return
-                        }
-                        if latest!.isDeleted() {
-                            print("\(self.implementation.TAG) Latest bundle already exists and will be deleted, download will overwrite it.")
-                            let res = self.implementation.delete(id: latest!.getId(), removeInfo: true)
-                            if !res {
-                                print("\(self.implementation.TAG) Delete version deleted: \(latest!.toString())")
-                            } else {
-                                print("\(self.implementation.TAG) Failed to delete failed bundle: \(latest!.toString())")
-                            }
-                        }
-                    }
-
-                    do {
-                        print("\(self.implementation.TAG) New bundle: \(latestVersionName) found. Current is: \(current.getVersionName()). Update will occur next time app moves to background.")
-                        let next = try self.implementation.download(url: downloadUrl, version: latestVersionName, sessionKey: sessionKey)
-                        if res.checksum != "" && next.getChecksum() != res.checksum {
-                            print("\(self.implementation.TAG) Error checksum", next.getChecksum(), res.checksum)
-                            self.implementation.sendStats(action: "checksum_fail", versionName: next.getVersionName())
-                            let resDel = self.implementation.delete(id: next.getId())
-                            if !resDel {
-                                print("\(self.implementation.TAG) Delete failed, id \(next.getId()) doesn't exist")
-                            }
-                            return
-                        }
-                        self.notifyListeners("updateAvailable", data: ["bundle": next.toJSON()])
-                        _ = self.implementation.setNextBundle(next: next.getId())
-                    } catch {
-                        print("\(self.implementation.TAG) Error downloading file", error.localizedDescription)
-                        let current: BundleInfo = self.implementation.getCurrentBundle()
-                        self.implementation.sendStats(action: "download_fail", versionName: current.getVersionName())
-                        self.notifyListeners("downloadFailed", data: ["version": latestVersionName])
-                        self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
-                    }
-                } else {
-                    print("\(self.implementation.TAG) No need to update, \(current.getId()) is the latest bundle.")
-                    self.notifyListeners("noNeedUpdate", data: ["bundle": current.toJSON()])
-                }
-            }
+            self.backgroundDownload()
         }
-
         self.checkAppReady()
     }
 
     @objc func appMovedToBackground() {
         print("\(self.implementation.TAG) Check for pending update")
-        let delayUpdatePreferences: String = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
+        let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
 
         let delayConditionList: [DelayCondition] = fromJsonArr(json: delayUpdatePreferences).map { obj -> DelayCondition in
             let kind: String = obj.value(forKey: "kind") as! String
@@ -587,7 +606,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     private func installNext() {
-        let delayUpdatePreferences: String = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
+        let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
         let delayConditionList: [DelayCondition]? = fromJsonArr(json: delayUpdatePreferences).map { obj -> DelayCondition in
             let kind: String = obj.value(forKey: "kind") as! String
             let value: String? = obj.value(forKey: "value") as? String
@@ -612,15 +631,15 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     @objc private func toJson(object: Any) -> String {
-        guard let data: Data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
             return ""
         }
         return String(data: data, encoding: String.Encoding.utf8) ?? ""
     }
 
     @objc private func fromJsonArr(json: String) -> [NSObject] {
-        let jsonData: Data = json.data(using: .utf8)!
-        let object: [NSObject]? = try? JSONSerialization.jsonObject(
+        let jsonData = json.data(using: .utf8)!
+        let object = try? JSONSerialization.jsonObject(
             with: jsonData,
             options: .mutableContainers
         ) as? [NSObject]
