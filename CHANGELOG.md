@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.14.5](https://github.com/Cap-go/capacitor-updater/compare/4.14.4...4.14.5) (2022-12-15)
+
+
+### Bug Fixes
+
+* npm configs ([375ab2c](https://github.com/Cap-go/capacitor-updater/commit/375ab2c0ba8b25cf36ea7fd460eeaeb18cce0355))
+
+### [4.14.4](https://github.com/Cap-go/capacitor-updater/compare/4.14.3...4.14.4) (2022-12-14)
+
+
+### Bug Fixes
+
+* ci script ([9e41edb](https://github.com/Cap-go/capacitor-updater/commit/9e41edb21dbb9738e9a8ad672c816e560edde1c9))
+
+### [4.14.3](https://github.com/Cap-go/capacitor-updater/compare/4.14.2...4.14.3) (2022-12-14)
+
+
+### Bug Fixes
+
+* ci ([bcce748](https://github.com/Cap-go/capacitor-updater/commit/bcce7486c90b82fa227c5f5e7180ac70608735bc))
+* ci add auto readme update ([ca6afeb](https://github.com/Cap-go/capacitor-updater/commit/ca6afeb12b87abe6b985133dc75ea93ed6ea0186))
+* message logs ios ([2cd95e8](https://github.com/Cap-go/capacitor-updater/commit/2cd95e8fa55a7671d236379d4b7f06efef2bfb97))
+
 ### [4.14.2](https://github.com/Cap-go/capacitor-updater/compare/4.14.1...4.14.2) (2022-12-10)
 
 
