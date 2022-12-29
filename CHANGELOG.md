@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.14.17](https://github.com/Cap-go/capacitor-updater/compare/4.14.16...4.14.17) (2022-12-27)
+
+### [4.14.16](https://github.com/Cap-go/capacitor-updater/compare/4.14.15...4.14.16) (2022-12-27)
+
+
+### Bug Fixes
+
+* lint issue ([8858307](https://github.com/Cap-go/capacitor-updater/commit/885830798935762e85f5a224042c2363293adc81))
+
+### [4.14.15](https://github.com/Cap-go/capacitor-updater/compare/4.14.14...4.14.15) (2022-12-26)
+
+
+### Bug Fixes
+
+* ios build issue ([bf78984](https://github.com/Cap-go/capacitor-updater/commit/bf7898442c1765fc26642ff26ba7f435b19baf47))
+
+### [4.14.14](https://github.com/Cap-go/capacitor-updater/compare/4.14.13...4.14.14) (2022-12-26)
+
+
+### Bug Fixes
+
+* build issue ([035c918](https://github.com/Cap-go/capacitor-updater/commit/035c9180c46ea5ff7af633829ac5f864be2700c8))
+
+### [4.14.13](https://github.com/Cap-go/capacitor-updater/compare/4.14.12...4.14.13) (2022-12-26)
+
+
+### Bug Fixes
+
+* use same function to finish download ([7adcfc0](https://github.com/Cap-go/capacitor-updater/commit/7adcfc02921d6c15debbf5b7745e11bf5c0234c9))
+
+### [4.14.12](https://github.com/Cap-go/capacitor-updater/compare/4.14.11...4.14.12) (2022-12-26)
+
+
+### Bug Fixes
+
+* remove for now security param to find a better option ([c0251b9](https://github.com/Cap-go/capacitor-updater/commit/c0251b91e232c5f794154d8e3532bf9ba75bb1bb))
+
+### [4.14.11](https://github.com/Cap-go/capacitor-updater/compare/4.14.10...4.14.11) (2022-12-23)
+
+
+### Bug Fixes
+
+* make error message same in ios and android ([557e447](https://github.com/Cap-go/capacitor-updater/commit/557e4475e25e9558508b56b798f3bc00ee343ac3))
+
+### [4.14.10](https://github.com/Cap-go/capacitor-updater/compare/4.14.9...4.14.10) (2022-12-23)
+
+
+### Bug Fixes
+
+* error message for getChannel ([75a0e73](https://github.com/Cap-go/capacitor-updater/commit/75a0e73b2f62824f9dfaff6475628c1c0406e303))
+
+### [4.14.9](https://github.com/Cap-go/capacitor-updater/compare/4.14.8...4.14.9) (2022-12-22)
+
+### [4.14.8](https://github.com/Cap-go/capacitor-updater/compare/4.14.7...4.14.8) (2022-12-22)
+
+
+### Bug Fixes
+
+* security issue sonarcloud ([2fe3f8b](https://github.com/Cap-go/capacitor-updater/commit/2fe3f8ba529d636d102935b720b0c6d1a8dc676d))
+
+### [4.14.7](https://github.com/Cap-go/capacitor-updater/compare/4.14.6...4.14.7) (2022-12-19)
+
+### [4.14.6](https://github.com/Cap-go/capacitor-updater/compare/4.14.5...4.14.6) (2022-12-19)
+
 ### [4.14.5](https://github.com/Cap-go/capacitor-updater/compare/4.14.4...4.14.5) (2022-12-15)
 
 
