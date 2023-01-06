@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.15.6](https://github.com/Cap-go/capacitor-updater/compare/4.15.5...4.15.6) (2023-01-06)
+
+
+### Bug Fixes
+
+* add missing event ([929e82a](https://github.com/Cap-go/capacitor-updater/commit/929e82a0f9b21d49357f5c9d717e9719e8feef49))
+
+### [4.15.5](https://github.com/Cap-go/capacitor-updater/compare/4.15.4...4.15.5) (2023-01-06)
+
+### [4.15.4](https://github.com/Cap-go/capacitor-updater/compare/4.15.3...4.15.4) (2023-01-06)
+
+
+### Bug Fixes
+
+* issue with timeout ([535949c](https://github.com/Cap-go/capacitor-updater/commit/535949cf5e55417546d3fff8a44be60bc0109a54))
+
+### [4.15.3](https://github.com/Cap-go/capacitor-updater/compare/4.15.2...4.15.3) (2023-01-04)
+
+### [4.15.2](https://github.com/Cap-go/capacitor-updater/compare/4.15.1...4.15.2) (2023-01-04)
+
+### [4.15.1](https://github.com/Cap-go/capacitor-updater/compare/4.15.0...4.15.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* lint ([200c8b3](https://github.com/Cap-go/capacitor-updater/commit/200c8b31e2233b1fdf687aba7367ead45c2a6cff))
+
+## [4.15.0](https://github.com/Cap-go/capacitor-updater/compare/4.14.18...4.15.0) (2023-01-03)
+
+
+### Features
+
+* add timeout in request ([bfdc5cd](https://github.com/Cap-go/capacitor-updater/commit/bfdc5cd5b81054edf8bb2249375c1d0a0cdb1c64))
+
 ### [4.14.18](https://github.com/Cap-go/capacitor-updater/compare/4.14.17...4.14.18) (2023-01-02)
 
 ### [4.14.17](https://github.com/Cap-go/capacitor-updater/compare/4.14.16...4.14.17) (2022-12-27)

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import com.android.volley.BuildConfig;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -63,7 +64,8 @@ public class CapacitorUpdater {
   private static final String bundleDirectory = "versions";
 
   public static final String TAG = "Capacitor-updater";
-  public static final String pluginVersion = "4.14.18";
+  public static final String pluginVersion = "4.15.6";
+  public static final int timeout = 20000;
 
   public SharedPreferences.Editor editor;
   public SharedPreferences prefs;
@@ -279,6 +281,12 @@ public class CapacitorUpdater {
             checksum
           );
           if (dest == null) {
+            final JSObject ret = new JSObject();
+            ret.put(
+              "version",
+              CapacitorUpdater.this.getCurrentBundle().getVersionName()
+            );
+            CapacitorUpdater.this.notifyListeners("downloadFailed", ret);
             CapacitorUpdater.this.sendStats(
                 "download_fail",
                 CapacitorUpdater.this.getCurrentBundle().getVersionName()
@@ -352,6 +360,12 @@ public class CapacitorUpdater {
       }
     } catch (IOException e) {
       e.printStackTrace();
+      final JSObject ret = new JSObject();
+      ret.put(
+        "version",
+        CapacitorUpdater.this.getCurrentBundle().getVersionName()
+      );
+      CapacitorUpdater.this.notifyListeners("downloadFailed", ret);
       CapacitorUpdater.this.sendStats(
           "download_fail",
           CapacitorUpdater.this.getCurrentBundle().getVersionName()
@@ -755,6 +769,13 @@ public class CapacitorUpdater {
         }
       }
     );
+    request.setRetryPolicy(
+      new DefaultRetryPolicy(
+        this.timeout,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      )
+    );
     this.requestQueue.add(request);
   }
 
@@ -820,6 +841,13 @@ public class CapacitorUpdater {
         }
       }
     );
+    request.setRetryPolicy(
+      new DefaultRetryPolicy(
+        this.timeout,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      )
+    );
     this.requestQueue.add(request);
   }
 
@@ -880,6 +908,13 @@ public class CapacitorUpdater {
         }
       }
     );
+    request.setRetryPolicy(
+      new DefaultRetryPolicy(
+        this.timeout,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      )
+    );
     this.requestQueue.add(request);
   }
 
@@ -917,6 +952,13 @@ public class CapacitorUpdater {
           CapacitorUpdater.this.createError("Error send stats", error);
         }
       }
+    );
+    request.setRetryPolicy(
+      new DefaultRetryPolicy(
+        this.timeout,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      )
     );
     this.requestQueue.add(request);
   }
