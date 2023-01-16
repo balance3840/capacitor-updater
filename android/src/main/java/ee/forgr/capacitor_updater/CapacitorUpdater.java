@@ -64,7 +64,6 @@ public class CapacitorUpdater {
   private static final String bundleDirectory = "versions";
 
   public static final String TAG = "Capacitor-updater";
-  public static final String pluginVersion = "4.17.0";
   public static final int timeout = 20000;
 
   public SharedPreferences.Editor editor;
@@ -74,6 +73,7 @@ public class CapacitorUpdater {
 
   public File documentsDir;
   public Activity activity;
+  public String PLUGIN_VERSION = "";
   public String versionBuild = "";
   public String versionCode = "";
   public String versionOs = "";
@@ -691,7 +691,7 @@ public class CapacitorUpdater {
     json.put("version_code", this.versionCode);
     json.put("version_os", this.versionOs);
     json.put("version_name", this.getCurrentBundle().getVersionName());
-    json.put("plugin_version", this.pluginVersion);
+    json.put("plugin_version", this.PLUGIN_VERSION);
     json.put("is_emulator", this.isEmulator());
     json.put("is_prod", this.isProd());
     return json;

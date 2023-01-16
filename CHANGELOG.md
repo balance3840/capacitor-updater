@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.17.6](https://github.com/Cap-go/capacitor-updater/compare/4.17.5...4.17.6) (2023-01-12)
+
+
+### Bug Fixes
+
+* trigger ci ([7672d35](https://github.com/Cap-go/capacitor-updater/commit/7672d351b3328891388249e69b93bac1cdc665eb))
+* use new version system ([de1e9fc](https://github.com/Cap-go/capacitor-updater/commit/de1e9fc25544a5f1842a4e75bb6811224818585b))
+
+### [4.17.5](https://github.com/Cap-go/capacitor-updater/compare/4.17.1...4.17.5) (2023-01-12)
+
+
+### Bug Fixes
+
+* add dlx to cache ([1b3c174](https://github.com/Cap-go/capacitor-updater/commit/1b3c174c64cb289787c0b86aee03eafcf62f7d9a))
+* CI use new capacitor-plugin-standard-version ([8062e4c](https://github.com/Cap-go/capacitor-updater/commit/8062e4c72a329287b81693ed115e9502dd812528))
+* force use latest ([105fbe5](https://github.com/Cap-go/capacitor-updater/commit/105fbe52ef9a2dd721b80891536efefff2fc8ccf))
+* missing namespace ([c1e6606](https://github.com/Cap-go/capacitor-updater/commit/c1e660677f5fe21b5fb6b492c84f9a8776b702ef))
+* trigger ci ([4a60715](https://github.com/Cap-go/capacitor-updater/commit/4a60715a7a16e5692f706859167710171c578579))
+
+### [4.17.4](https://github.com/Cap-go/capacitor-updater/compare/4.17.3...4.17.4) (2023-01-12)
+
+### [4.17.3](https://github.com/Cap-go/capacitor-updater/compare/4.17.2...4.17.3) (2023-01-12)
+
+### [4.17.2](https://github.com/Cap-go/capacitor-updater/compare/4.17.1...4.17.2) (2023-01-12)
+
+### [4.17.1](https://github.com/Cap-go/capacitor-updater/compare/4.17.0...4.17.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* remove useless bumpfile ([b974f70](https://github.com/Cap-go/capacitor-updater/commit/b974f70f747c84d6f066aa22e72f452a189a2e6e))
+
 ## [4.17.0](https://github.com/Cap-go/capacitor-updater/compare/4.16.1...4.17.0) (2023-01-10)
 
 
