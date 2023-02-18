@@ -2,6 +2,251 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.17.36](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.36) (2023-02-18)
+
+
+### Bug Fixes
+
+* add back md file ([f560a81](https://github.com/Cap-go/capacitor-updater/commit/f560a819a66b29192bba7c84a35975d9e08dc76b))
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* better function name and order + fix android activity issue ([4232fee](https://github.com/Cap-go/capacitor-updater/commit/4232fee86ff45f0119fbcc511a1993c7a8c52a4a))
+* call appMovedToForeground only if not in app ([d4d53fa](https://github.com/Cap-go/capacitor-updater/commit/d4d53fa05780fb4029f3a01178f26d9f0f6115d1))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* remove sonarcloud security fix who broken user app ([5f0e402](https://github.com/Cap-go/capacitor-updater/commit/5f0e4025197902fef65707d5b6cb6912e4b04495))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.35](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.35) (2023-02-14)
+
+
+### Bug Fixes
+
+* add back md file ([f560a81](https://github.com/Cap-go/capacitor-updater/commit/f560a819a66b29192bba7c84a35975d9e08dc76b))
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* better function name and order + fix android activity issue ([4232fee](https://github.com/Cap-go/capacitor-updater/commit/4232fee86ff45f0119fbcc511a1993c7a8c52a4a))
+* call appMovedToForeground only if not in app ([d4d53fa](https://github.com/Cap-go/capacitor-updater/commit/d4d53fa05780fb4029f3a01178f26d9f0f6115d1))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.34](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.34) (2023-02-13)
+
+
+### Bug Fixes
+
+* add back md file ([f560a81](https://github.com/Cap-go/capacitor-updater/commit/f560a819a66b29192bba7c84a35975d9e08dc76b))
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* better function name and order + fix android activity issue ([4232fee](https://github.com/Cap-go/capacitor-updater/commit/4232fee86ff45f0119fbcc511a1993c7a8c52a4a))
+* call appMovedToForeground only if not in app ([d4d53fa](https://github.com/Cap-go/capacitor-updater/commit/d4d53fa05780fb4029f3a01178f26d9f0f6115d1))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.33](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.33) (2023-02-13)
+
+
+### Bug Fixes
+
+* add back md file ([f560a81](https://github.com/Cap-go/capacitor-updater/commit/f560a819a66b29192bba7c84a35975d9e08dc76b))
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* better function name and order + fix android activity issue ([4232fee](https://github.com/Cap-go/capacitor-updater/commit/4232fee86ff45f0119fbcc511a1993c7a8c52a4a))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.32](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.32) (2023-02-13)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* better function name and order + fix android activity issue ([4232fee](https://github.com/Cap-go/capacitor-updater/commit/4232fee86ff45f0119fbcc511a1993c7a8c52a4a))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.31](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.31) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.30](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.30) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* lint issue ([ce64ae1](https://github.com/Cap-go/capacitor-updater/commit/ce64ae103063162a3564bf156a962247cd0e1410))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.29](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.29) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.28](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.28) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.27](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.27) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.26](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.26) (2023-02-10)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.25](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.25) (2023-02-06)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.24](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.24) (2023-02-04)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+* script remove useless file from git ([b76f731](https://github.com/Cap-go/capacitor-updater/commit/b76f731894f39d607ecda98bc56a10c94a2f35f2))
+
+### [4.17.23](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.23) (2023-02-04)
+
+
+### Bug Fixes
+
+* api file for the doc ([0ceb96b](https://github.com/Cap-go/capacitor-updater/commit/0ceb96b4ac965be9925e96b60f6e9a5078c61fb7))
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+
+### [4.17.22](https://github.com/Cap-go/capacitor-updater/compare/4.17.21...4.17.22) (2023-02-04)
+
+
+### Bug Fixes
+
+* commit issue ([edf5468](https://github.com/Cap-go/capacitor-updater/commit/edf5468e8ea95640746400dfec841e96f91d8996))
+
+### [4.17.21](https://github.com/Cap-go/capacitor-updater/compare/4.17.20...4.17.21) (2023-02-04)
+
+
+### Bug Fixes
+
+* use new action npm publish ([6f384e6](https://github.com/Cap-go/capacitor-updater/commit/6f384e65053403bb2a78b807cb133860064980f5))
+
+### [4.17.20](https://github.com/Cap-go/capacitor-updater/compare/4.17.19...4.17.20) (2023-02-04)
+
+
+### Bug Fixes
+
+* lint issue ([607b1cb](https://github.com/Cap-go/capacitor-updater/commit/607b1cb97067da87f3a22af9e01095571e534f0a))
+
+### [4.17.19](https://github.com/Cap-go/capacitor-updater/compare/4.17.18...4.17.19) (2023-02-04)
+
+
+### Bug Fixes
+
+* packages ([eeaac1d](https://github.com/Cap-go/capacitor-updater/commit/eeaac1d4472d6122d6d4db8f45b4b4f66f831297))
+
+### [4.17.18](https://github.com/Cap-go/capacitor-updater/compare/4.17.17...4.17.18) (2023-02-03)
+
+
+### Bug Fixes
+
+* better step name ([ef99cfc](https://github.com/Cap-go/capacitor-updater/commit/ef99cfc191e2456a7f44c9ba96aefc1c402fe99d))
+* change order to commit doc well ([45d7b41](https://github.com/Cap-go/capacitor-updater/commit/45d7b4126b3aed5f3e328129c4a4c248cbd937f8))
+
+### [4.17.17](https://github.com/Cap-go/capacitor-updater/compare/4.17.16...4.17.17) (2023-02-03)
+
+
+### Bug Fixes
+
+* stepo title ([c975842](https://github.com/Cap-go/capacitor-updater/commit/c975842afe2298b261b8416c57313efe99674b3a))
+
+### [4.17.16](https://github.com/Cap-go/capacitor-updater/compare/4.17.15...4.17.16) (2023-02-03)
+
+
+### Bug Fixes
+
+* ci for doc ([1d07bd2](https://github.com/Cap-go/capacitor-updater/commit/1d07bd235efa5d945c6d6f90ca4008b8c0d0635a))
+
+### [4.17.15](https://github.com/Cap-go/capacitor-updater/compare/4.17.14...4.17.15) (2023-02-03)
+
+
+### Bug Fixes
+
+* use good branch ([723dfdc](https://github.com/Cap-go/capacitor-updater/commit/723dfdc951ba7831251a9323568b7035309e2c0d))
+
+### [4.17.14](https://github.com/Cap-go/capacitor-updater/compare/4.17.13...4.17.14) (2023-02-03)
+
+
+### Bug Fixes
+
+* add auto docgen api ([38a547a](https://github.com/Cap-go/capacitor-updater/commit/38a547aae4bc93f3bcb2d20c5a94ca5b689aa0e7))
+* ci script ([38d5adf](https://github.com/Cap-go/capacitor-updater/commit/38d5adf9cc4b0d7ed8b1719627b377afd921397b))
+* ci version ([921eb2b](https://github.com/Cap-go/capacitor-updater/commit/921eb2bd643760879b66f84f5077632f56ee98de))
+
+### [4.17.13](https://github.com/Cap-go/capacitor-updater/compare/4.17.12...4.17.13) (2023-02-02)
+
+
+### Bug Fixes
+
+* issue with empty or null value ([d8acacc](https://github.com/Cap-go/capacitor-updater/commit/d8acacc55a4aac483ca37ab2273ca2e4aff536cc))
+
+### [4.17.12](https://github.com/Cap-go/capacitor-updater/compare/4.17.11...4.17.12) (2023-01-30)
+
+### [4.17.11](https://github.com/Cap-go/capacitor-updater/compare/4.17.10...4.17.11) (2023-01-26)
+
+
+### Bug Fixes
+
+* issue [#151](https://github.com/Cap-go/capacitor-updater/issues/151) + checksum possibly null ([66c27e9](https://github.com/Cap-go/capacitor-updater/commit/66c27e97dbeae6baa4137e3a1a8faadbe83af04a))
+
+### [4.17.10](https://github.com/Cap-go/capacitor-updater/compare/4.17.9...4.17.10) (2023-01-24)
+
+### [4.17.9](https://github.com/Cap-go/capacitor-updater/compare/4.17.8...4.17.9) (2023-01-24)
+
+### [4.17.8](https://github.com/Cap-go/capacitor-updater/compare/4.17.7...4.17.8) (2023-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.code.gson:gson to v2.10.1 ([fc680a9](https://github.com/Cap-go/capacitor-updater/commit/fc680a9122dab2cab2ccbe4aeeaab64b5253417f))
+
+### [4.17.7](https://github.com/Cap-go/capacitor-updater/compare/4.17.6...4.17.7) (2023-01-24)
+
+
+### Bug Fixes
+
+* issue with auto version number ([7c3a7aa](https://github.com/Cap-go/capacitor-updater/commit/7c3a7aa6644c73209cbc80f199767c52ad66ec29))
+
 ### [4.17.6](https://github.com/Cap-go/capacitor-updater/compare/4.17.5...4.17.6) (2023-01-12)
 
 

@@ -1,7 +1,9 @@
 package ee.forgr.capacitor_updater;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -47,7 +49,7 @@ public class CapacitorUpdaterPlugin
   private static final String channelUrlDefault =
     "https://api.capgo.app/channel_self";
 
-  privatesfinalsStringsPLUGIN_VERSIONs=s"4.17.6";
+  private final String PLUGIN_VERSION = "4.17.36";
   private static final String DELAY_CONDITION_PREFERENCES = "";
 
   private SharedPreferences.Editor editor;
@@ -63,6 +65,8 @@ public class CapacitorUpdaterPlugin
   private Boolean resetWhenUpdate = true;
   private Thread backgroundTask;
   private Boolean taskRunning = false;
+
+  private Boolean isPreviousMainActivity = true;
 
   private volatile Thread appReadyCheck;
 
@@ -148,8 +152,6 @@ public class CapacitorUpdaterPlugin
     final Application application = (Application) this.getContext()
       .getApplicationContext();
     application.registerActivityLifecycleCallbacks(this);
-    this.onActivityStarted(this.getActivity());
-    this._checkCancelDelay(true);
   }
 
   private void cleanupObsoleteVersions() {
@@ -959,11 +961,14 @@ public class CapacitorUpdaterPlugin
                             final String session_key = res.has("session_key")
                               ? res.getString("session_key")
                               : "";
+                            final String checksum = res.has("checksum")
+                              ? res.getString("checksum")
+                              : "";
                             CapacitorUpdaterPlugin.this.implementation.downloadBackground(
                                 url,
                                 latestVersionName,
                                 session_key,
-                                res.getString("checksum")
+                                checksum
                               );
                           } catch (final Exception e) {
                             Log.e(
@@ -1023,70 +1028,6 @@ public class CapacitorUpdaterPlugin
       }
     )
       .start();
-  }
-
-  @Override // appMovedToForeground
-  public void onActivityStarted(@NonNull final Activity activity) {
-    if (CapacitorUpdaterPlugin.this._isAutoUpdateEnabled()) {
-      this.backgroundDownload();
-    }
-    this.checkAppReady();
-  }
-
-  @Override // appMovedToBackground
-  public void onActivityStopped(@NonNull final Activity activity) {
-    Log.i(CapacitorUpdater.TAG, "Checking for pending update");
-    try {
-      Gson gson = new Gson();
-      String delayUpdatePreferences = prefs.getString(
-        DELAY_CONDITION_PREFERENCES,
-        "[]"
-      );
-      Type type = new TypeToken<ArrayList<DelayCondition>>() {}.getType();
-      ArrayList<DelayCondition> delayConditionList = gson.fromJson(
-        delayUpdatePreferences,
-        type
-      );
-      String backgroundValue = null;
-      for (DelayCondition delayCondition : delayConditionList) {
-        if (delayCondition.getKind().toString().equals("background")) {
-          String value = delayCondition.getValue();
-          backgroundValue = (value != null || !value.equals("")) ? value : "0";
-        }
-      }
-      if (backgroundValue != null) {
-        taskRunning = true;
-        final Long timeout = Long.parseLong(backgroundValue);
-        if (backgroundTask != null) {
-          backgroundTask.interrupt();
-        }
-        backgroundTask =
-          new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
-                try {
-                  Thread.sleep(timeout);
-                  taskRunning = false;
-                  _checkCancelDelay(false);
-                  installNext();
-                } catch (InterruptedException e) {
-                  Log.i(
-                    CapacitorUpdater.TAG,
-                    "Background Task canceled, Activity resumed before timer completes"
-                  );
-                }
-              }
-            }
-          );
-        backgroundTask.start();
-      } else {
-        this._checkCancelDelay(false);
-        this.installNext();
-      }
-    } catch (final Exception e) {
-      Log.e(CapacitorUpdater.TAG, "Error during onActivityStopped", e);
-    }
   }
 
   private void installNext() {
@@ -1211,6 +1152,100 @@ public class CapacitorUpdaterPlugin
           DeferredNotifyAppReadyCheck.class.getName() + " was interrupted."
         );
       }
+    }
+  }
+
+  public void appMovedToForeground() {
+    this._checkCancelDelay(true);
+    if (CapacitorUpdaterPlugin.this._isAutoUpdateEnabled()) {
+      this.backgroundDownload();
+    }
+    this.checkAppReady();
+  }
+
+  public void appMovedToBackground() {
+    Log.i(CapacitorUpdater.TAG, "Checking for pending update");
+    try {
+      Gson gson = new Gson();
+      String delayUpdatePreferences = prefs.getString(
+        DELAY_CONDITION_PREFERENCES,
+        "[]"
+      );
+      Type type = new TypeToken<ArrayList<DelayCondition>>() {}.getType();
+      ArrayList<DelayCondition> delayConditionList = gson.fromJson(
+        delayUpdatePreferences,
+        type
+      );
+      String backgroundValue = null;
+      for (DelayCondition delayCondition : delayConditionList) {
+        if (delayCondition.getKind().toString().equals("background")) {
+          String value = delayCondition.getValue();
+          backgroundValue = (value != null && !value.isEmpty()) ? value : "0";
+        }
+      }
+      if (backgroundValue != null) {
+        taskRunning = true;
+        final Long timeout = Long.parseLong(backgroundValue);
+        if (backgroundTask != null) {
+          backgroundTask.interrupt();
+        }
+        backgroundTask =
+          new Thread(
+            new Runnable() {
+              @Override
+              public void run() {
+                try {
+                  Thread.sleep(timeout);
+                  taskRunning = false;
+                  _checkCancelDelay(false);
+                  installNext();
+                } catch (InterruptedException e) {
+                  Log.i(
+                    CapacitorUpdater.TAG,
+                    "Background Task canceled, Activity resumed before timer completes"
+                  );
+                }
+              }
+            }
+          );
+        backgroundTask.start();
+      } else {
+        this._checkCancelDelay(false);
+        this.installNext();
+      }
+    } catch (final Exception e) {
+      Log.e(CapacitorUpdater.TAG, "Error during onActivityStopped", e);
+    }
+  }
+
+  private boolean isMainActivity() {
+    Context mContext = this.getContext();
+    ActivityManager activityManager = (ActivityManager) mContext.getSystemService(
+      Context.ACTIVITY_SERVICE
+    );
+    List<ActivityManager.AppTask> runningTasks = activityManager.getAppTasks();
+    ActivityManager.RecentTaskInfo runningTask = runningTasks
+      .get(0)
+      .getTaskInfo();
+    String className = runningTask.baseIntent.getComponent().getClassName();
+    String runningActivity = runningTask.topActivity.getClassName();
+    boolean isThisAppActivity = className.equals(runningActivity);
+    return isThisAppActivity;
+  }
+
+  @Override
+  public void onActivityStarted(@NonNull final Activity activity) {
+    if (isPreviousMainActivity) {
+      this.appMovedToForeground();
+    }
+    isPreviousMainActivity = true;
+  }
+
+  @Override
+  public void onActivityStopped(@NonNull final Activity activity) {
+    isPreviousMainActivity = isMainActivity();
+    if (isPreviousMainActivity) {
+      this.appMovedToBackground();
     }
   }
 

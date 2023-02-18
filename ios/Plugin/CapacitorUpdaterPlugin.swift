@@ -9,7 +9,7 @@ import Version
 @objc(CapacitorUpdaterPlugin)
 public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
-    privatesletsPLUGIN_VERSION:sStrings=s"4.17.6"
+    private let PLUGIN_VERSION: String = "4.17.36"
     static let updateUrlDefault = "https://api.capgo.app/updates"
     static let statsUrlDefault = "https://api.capgo.app/stats"
     static let channelUrlDefault = "https://api.capgo.app/channel_self"
@@ -270,31 +270,34 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     @objc func _reset(toLastSuccessful: Bool) -> Bool {
         guard let bridge = self.bridge else { return false }
 
-        if let vc = bridge.viewController as? CAPBridgeViewController {
+        if (bridge.viewController as? CAPBridgeViewController) != nil {
             let fallback: BundleInfo = self.implementation.getFallbackBundle()
+
+            // If developer wants to reset to the last successful bundle, and that bundle is not
+            // the built-in bundle, set it as the bundle to use and reload.
             if toLastSuccessful && !fallback.isBuiltin() {
                 print("\(self.implementation.TAG) Resetting to: \(fallback.toString())")
                 return self.implementation.set(bundle: fallback) && self._reload()
             }
+
+            print("\(self.implementation.TAG) Resetting to builtin version")
+
+            // Otherwise, reset back to the built-in bundle and reload.
             self.implementation.reset()
-            vc.setServerBasePath(path: "")
-            DispatchQueue.main.async {
-                vc.loadView()
-                vc.viewDidLoad()
-                print("\(self.implementation.TAG) Reset to builtin version")
-            }
-            return true
+            return self._reload()
         }
+
         return false
     }
 
     @objc func reset(_ call: CAPPluginCall) {
         let toLastSuccessful = call.getBool("toLastSuccessful") ?? false
         if self._reset(toLastSuccessful: toLastSuccessful) {
-            return call.resolve()
+            call.resolve()
+        } else {
+            print("\(self.implementation.TAG) Reset failed")
+            call.reject("\(self.implementation.TAG) Reset failed")
         }
-        print("\(self.implementation.TAG) Reset failed")
-        call.reject("\(self.implementation.TAG) Reset failed")
     }
 
     @objc func current(_ call: CAPPluginCall) {
@@ -570,51 +573,6 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         }
     }
 
-    @objc func appMovedToForeground() {
-        if backgroundWork != nil && taskRunning {
-            backgroundWork!.cancel()
-            print("\(self.implementation.TAG) Background Timer Task canceled, Activity resumed before timer completes")
-        }
-        if self._isAutoUpdateEnabled() {
-            self.backgroundDownload()
-        }
-        self.checkAppReady()
-    }
-
-    @objc func appMovedToBackground() {
-        print("\(self.implementation.TAG) Check for pending update")
-        let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
-
-        let delayConditionList: [DelayCondition] = fromJsonArr(json: delayUpdatePreferences).map { obj -> DelayCondition in
-            let kind: String = obj.value(forKey: "kind") as! String
-            let value: String? = obj.value(forKey: "value") as? String
-            return DelayCondition(kind: kind, value: value)
-        }
-        var backgroundValue: String?
-        for delayCondition in delayConditionList {
-            if delayCondition.getKind() == "background" {
-                let value: String? = delayCondition.getValue()
-                backgroundValue = (value != nil && value != "") ? value! : "0"
-            }
-        }
-        if backgroundValue != nil {
-            self.taskRunning = true
-            let interval: Double = (Double(backgroundValue!) ?? 0.0) / 1000
-            self.backgroundWork?.cancel()
-            self.backgroundWork = DispatchWorkItem(block: {
-                // IOS never executes this task in background
-                self.taskRunning = false
-                self._checkCancelDelay(killed: false)
-                self.installNext()
-            })
-            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + interval, execute: self.backgroundWork!)
-        } else {
-            self._checkCancelDelay(killed: false)
-            self.installNext()
-        }
-
-    }
-
     @objc func appKilled() {
         self._checkCancelDelay(killed: true)
     }
@@ -658,5 +616,50 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
             options: .mutableContainers
         ) as? [NSObject]
         return object ?? []
+    }
+
+    @objc func appMovedToForeground() {
+        if backgroundWork != nil && taskRunning {
+            backgroundWork!.cancel()
+            print("\(self.implementation.TAG) Background Timer Task canceled, Activity resumed before timer completes")
+        }
+        if self._isAutoUpdateEnabled() {
+            self.backgroundDownload()
+        }
+        self.checkAppReady()
+    }
+
+    @objc func appMovedToBackground() {
+        print("\(self.implementation.TAG) Check for pending update")
+        let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
+
+        let delayConditionList: [DelayCondition] = fromJsonArr(json: delayUpdatePreferences).map { obj -> DelayCondition in
+            let kind: String = obj.value(forKey: "kind") as! String
+            let value: String? = obj.value(forKey: "value") as? String
+            return DelayCondition(kind: kind, value: value)
+        }
+        var backgroundValue: String?
+        for delayCondition in delayConditionList {
+            if delayCondition.getKind() == "background" {
+                let value: String? = delayCondition.getValue()
+                backgroundValue = (value != nil && value != "") ? value! : "0"
+            }
+        }
+        if backgroundValue != nil {
+            self.taskRunning = true
+            let interval: Double = (Double(backgroundValue!) ?? 0.0) / 1000
+            self.backgroundWork?.cancel()
+            self.backgroundWork = DispatchWorkItem(block: {
+                // IOS never executes this task in background
+                self.taskRunning = false
+                self._checkCancelDelay(killed: false)
+                self.installNext()
+            })
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + interval, execute: self.backgroundWork!)
+        } else {
+            self._checkCancelDelay(killed: false)
+            self.installNext()
+        }
+
     }
 }

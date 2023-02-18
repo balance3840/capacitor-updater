@@ -198,7 +198,7 @@ public class CapacitorUpdater {
           );
         }
 
-        final int newPercent = (int) ((lengthRead * 100) / lengthTotal);
+        final int newPercent = (int) ((lengthRead / (float) lengthTotal) * 100);
         if (lengthTotal > 1 && newPercent != percent) {
           percent = newPercent;
           this.notifyDownload(id, this.calcTotalPercent(percent, 75, 90));
@@ -337,7 +337,11 @@ public class CapacitorUpdater {
         checksum
       );
       this.saveBundleInfo(id, info);
-      if (!checksumRes.equals("") && !checksumRes.equals(checksum)) {
+      if (
+        checksumRes != null &&
+        !checksumRes.isEmpty() &&
+        !checksumRes.equals(checksum)
+      ) {
         Log.e(
           CapacitorUpdater.TAG,
           "Error checksum " + info.getChecksum() + " " + checksum
@@ -420,7 +424,7 @@ public class CapacitorUpdater {
     this.notifyDownload(id, 10);
     while ((length = dis.read(buffer)) > 0) {
       fos.write(buffer, 0, length);
-      final int newPercent = (int) ((bytesRead * 100) / totalLength);
+      final int newPercent = (int) ((bytesRead / (float) totalLength) * 100);
       if (totalLength > 1 && newPercent != percent) {
         percent = newPercent;
         this.notifyDownload(id, this.calcTotalPercent(percent, 10, 70));
@@ -463,7 +467,13 @@ public class CapacitorUpdater {
 
   private void decryptFile(final File file, final String ivSessionKey)
     throws IOException {
-    if (this.privateKey.equals("") || ivSessionKey.equals("")) {
+    // (str != null && !str.isEmpty())
+    if (
+      this.privateKey == null ||
+      this.privateKey.isEmpty() ||
+      ivSessionKey == null ||
+      ivSessionKey.isEmpty()
+    ) {
       return;
     }
     try {
