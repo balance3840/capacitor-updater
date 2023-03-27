@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package ee.forgr.capacitor_updater;
 
 import android.app.Activity;
@@ -49,7 +55,7 @@ public class CapacitorUpdaterPlugin
   private static final String channelUrlDefault =
     "https://api.capgo.app/channel_self";
 
-  private final String PLUGIN_VERSION = "4.17.36";
+  private final String PLUGIN_VERSION = "4.24.0";
   private static final String DELAY_CONDITION_PREFERENCES = "";
 
   private SharedPreferences.Editor editor;
@@ -104,7 +110,8 @@ public class CapacitorUpdaterPlugin
       this.implementation.versionCode = Integer.toString(pInfo.versionCode);
       this.implementation.requestQueue =
         Volley.newRequestQueue(this.getContext());
-      this.currentVersionNative = new Version(pInfo.versionName);
+      this.currentVersionNative =
+        new Version(this.getConfig().getString("version", pInfo.versionName));
     } catch (final PackageManager.NameNotFoundException e) {
       Log.e(CapacitorUpdater.TAG, "Error instantiating implementation", e);
       return;
@@ -1220,9 +1227,8 @@ public class CapacitorUpdaterPlugin
 
   private boolean isMainActivity() {
     Context mContext = this.getContext();
-    ActivityManager activityManager = (ActivityManager) mContext.getSystemService(
-      Context.ACTIVITY_SERVICE
-    );
+    ActivityManager activityManager =
+      (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
     List<ActivityManager.AppTask> runningTasks = activityManager.getAppTasks();
     ActivityManager.RecentTaskInfo runningTask = runningTasks
       .get(0)

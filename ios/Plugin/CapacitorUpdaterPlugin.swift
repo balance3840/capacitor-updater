@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import Foundation
 import Capacitor
 import Version
@@ -9,7 +15,7 @@ import Version
 @objc(CapacitorUpdaterPlugin)
 public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
-    private let PLUGIN_VERSION: String = "4.17.36"
+    private let PLUGIN_VERSION: String = "4.24.0"
     static let updateUrlDefault = "https://api.capgo.app/updates"
     static let statsUrlDefault = "https://api.capgo.app/stats"
     static let channelUrlDefault = "https://api.capgo.app/channel_self"
@@ -31,7 +37,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     override public func load() {
         print("\(self.implementation.TAG) init for device \(self.implementation.deviceID)")
         do {
-            currentVersionNative = try Version(Bundle.main.versionName ?? "0.0.0")
+            currentVersionNative = try Version(getConfig().getString("version", Bundle.main.versionName ?? "0.0.0")!)
         } catch {
             print("\(self.implementation.TAG) Cannot get version native \(currentVersionNative)")
         }
@@ -391,6 +397,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
                 case "date":
                     if value != nil && value != "" {
                         let dateFormatter = ISO8601DateFormatter()
+                        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
                         guard let ExpireDate = dateFormatter.date(from: value!) else {
                             self._cancelDelay(source: "date parsing issue")
                             return

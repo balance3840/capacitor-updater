@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 /// <reference types="@capacitor/cli" />
 import type { PluginListenerHandle } from "@capacitor/core";
 
@@ -84,6 +90,17 @@ declare module "@capacitor/cli" {
        * @default undefined
        */
       privateKey?: string;
+
+      /**
+       * Configure the current version of the app. This will be used for the first update request.
+       * If not set, the plugin will get the version from the native code.
+       *
+       * Only available for Android and iOS.
+       *
+       * @default undefined
+       * @since  4.17.48
+       */
+      version?: string;
     };
   }
 }

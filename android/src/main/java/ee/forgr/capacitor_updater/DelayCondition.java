@@ -1,10 +1,20 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package ee.forgr.capacitor_updater;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class DelayCondition {
 
+  @SerializedName("kind")
   private DelayUntilNext kind;
+
+  @SerializedName("value")
   private String value;
 
   public DelayCondition(DelayUntilNext kind, String value) {
