@@ -172,6 +172,13 @@ public class CapacitorUpdater {
 
       ZipEntry entry;
       while ((entry = zis.getNextEntry()) != null) {
+        if (entry.getName().contains("\\")) {
+          Log.e(
+            TAG,
+            "unzip: Windows path is not supported, please use unix path as require by zip RFC: " +
+            entry.getName()
+          );
+        }
         final File file = new File(targetDirectory, entry.getName());
         final String canonicalPath = file.getCanonicalPath();
         final String canonicalDir = targetDirectory.getCanonicalPath();
@@ -647,6 +654,7 @@ public class CapacitorUpdater {
       this.sendStats("set", newBundle.getVersionName());
       return true;
     }
+    this.setBundleStatus(id, BundleStatus.ERROR);
     this.sendStats("set_fail", newBundle.getVersionName());
     return false;
   }
@@ -763,7 +771,11 @@ public class CapacitorUpdater {
             String key = keys.next();
             if (res.has(key)) {
               try {
-                ret.put(key, res.get(key));
+                if ("session_key".equals(key)) {
+                  ret.put("sessionKey", res.get(key));
+                } else {
+                  ret.put(key, res.get(key));
+                }
               } catch (JSONException e) {
                 e.printStackTrace();
                 final JSObject retError = new JSObject();

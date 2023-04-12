@@ -147,6 +147,7 @@ Capacitor Updator works by unzipping a compiled app bundle to the native device 
 * [`getDeviceId()`](#getdeviceid)
 * [`getPluginVersion()`](#getpluginversion)
 * [`isAutoUpdateEnabled()`](#isautoupdateenabled)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -596,6 +597,19 @@ Get the state of auto update config. This will return `false` in manual mode.
 --------------------
 
 
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 1.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -620,14 +634,15 @@ Get the state of auto update config. This will return `false` in manual mode.
 
 #### latestVersion
 
-| Prop          | Type                 | Description             | Since |
-| ------------- | -------------------- | ----------------------- | ----- |
-| **`version`** | <code>string</code>  | Res of getLatest method | 4.0.0 |
-| **`major`**   | <code>boolean</code> |                         |       |
-| **`message`** | <code>string</code>  |                         |       |
-| **`error`**   | <code>string</code>  |                         |       |
-| **`old`**     | <code>string</code>  |                         |       |
-| **`url`**     | <code>string</code>  |                         |       |
+| Prop             | Type                 | Description             | Since |
+| ---------------- | -------------------- | ----------------------- | ----- |
+| **`version`**    | <code>string</code>  | Res of getLatest method | 4.0.0 |
+| **`major`**      | <code>boolean</code> |                         |       |
+| **`message`**    | <code>string</code>  |                         |       |
+| **`sessionKey`** | <code>string</code>  |                         |       |
+| **`error`**      | <code>string</code>  |                         |       |
+| **`old`**        | <code>string</code>  |                         |       |
+| **`url`**        | <code>string</code>  |                         |       |
 
 
 #### channelRes

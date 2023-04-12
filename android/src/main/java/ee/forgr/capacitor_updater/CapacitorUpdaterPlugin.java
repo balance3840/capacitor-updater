@@ -55,7 +55,7 @@ public class CapacitorUpdaterPlugin
   private static final String channelUrlDefault =
     "https://api.capgo.app/channel_self";
 
-  private final String PLUGIN_VERSION = "4.24.0";
+  private final String PLUGIN_VERSION = "4.35.0";
   private static final String DELAY_CONDITION_PREFERENCES = "";
 
   private SharedPreferences.Editor editor;
@@ -965,8 +965,8 @@ public class CapacitorUpdaterPlugin
                             );
 
                             final String url = res.getString("url");
-                            final String session_key = res.has("session_key")
-                              ? res.getString("session_key")
+                            final String sessionKey = res.has("sessionKey")
+                              ? res.getString("sessionKey")
                               : "";
                             final String checksum = res.has("checksum")
                               ? res.getString("checksum")
@@ -974,7 +974,7 @@ public class CapacitorUpdaterPlugin
                             CapacitorUpdaterPlugin.this.implementation.downloadBackground(
                                 url,
                                 latestVersionName,
-                                session_key,
+                                sessionKey,
                                 checksum
                               );
                           } catch (final Exception e) {
