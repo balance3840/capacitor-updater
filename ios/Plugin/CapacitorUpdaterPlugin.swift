@@ -15,7 +15,7 @@ import Version
 @objc(CapacitorUpdaterPlugin)
 public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
-    private let PLUGIN_VERSION: String = "4.35.0"
+    private let PLUGIN_VERSION: String = "4.55.0"
     static let updateUrlDefault = "https://api.capgo.app/updates"
     static let statsUrlDefault = "https://api.capgo.app/stats"
     static let channelUrlDefault = "https://api.capgo.app/channel_self"
@@ -74,7 +74,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         } catch {
             print("\(self.implementation.TAG) Cannot get version native \(currentVersionNative)")
         }
-        if LatestVersionNative != "0.0.0" && currentVersionNative.major > LatestVersionNative.major {
+        if LatestVersionNative != "0.0.0" && self.currentVersionNative.description != LatestVersionNative.description {
             _ = self._reset(toLastSuccessful: false)
             let res = implementation.list()
             res.forEach { version in
@@ -122,7 +122,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         let sessionKey = call.getString("sessionKey", "")
         let checksum = call.getString("checksum", "")
         let url = URL(string: urlString)
-        print("\(self.implementation.TAG) Downloading \(url!)")
+        print("\(self.implementation.TAG) Downloading \(String(describing: url))")
         DispatchQueue.global(qos: .background).async {
             do {
                 let next = try self.implementation.download(url: url!, version: version, sessionKey: sessionKey)
@@ -138,7 +138,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
                 self.notifyListeners("updateAvailable", data: ["bundle": next.toJSON()])
                 call.resolve(next.toJSON())
             } catch {
-                print("\(self.implementation.TAG) Failed to download from: \(url!) \(error.localizedDescription)")
+                print("\(self.implementation.TAG) Failed to download from: \(String(describing: url)) \(error.localizedDescription)")
                 self.notifyListeners("downloadFailed", data: ["version": version])
                 let current: BundleInfo = self.implementation.getCurrentBundle()
                 self.implementation.sendStats(action: "download_fail", versionName: current.getVersionName())
@@ -434,7 +434,11 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     private func _isAutoUpdateEnabled() -> Bool {
-        return self.autoUpdate && self.updateUrl != ""
+        let instanceDescriptor = (self.bridge?.viewController as? CAPBridgeViewController)?.instanceDescriptor()
+        if instanceDescriptor?.serverURL != nil {
+            print("⚠️ \(self.implementation.TAG) AutoUpdate is automatic disabled when serverUrl is set.")
+        }
+        return self.autoUpdate && self.updateUrl != "" && instanceDescriptor?.serverURL == nil
     }
 
     @objc func isAutoUpdateEnabled(_ call: CAPPluginCall) {
@@ -581,6 +585,7 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     @objc func appKilled() {
+        print("\(self.implementation.TAG) onActivityDestroyed: all activity destroyed")
         self._checkCancelDelay(killed: true)
     }
 
@@ -626,17 +631,23 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
     }
 
     @objc func appMovedToForeground() {
+        let current: BundleInfo = self.implementation.getCurrentBundle()
+        self.implementation.sendStats(action: "app_moved_to_foreground", versionName: current.getVersionName())
         if backgroundWork != nil && taskRunning {
             backgroundWork!.cancel()
             print("\(self.implementation.TAG) Background Timer Task canceled, Activity resumed before timer completes")
         }
         if self._isAutoUpdateEnabled() {
             self.backgroundDownload()
+        } else {
+            print("\(self.implementation.TAG) Auto update is disabled")
         }
         self.checkAppReady()
     }
 
     @objc func appMovedToBackground() {
+        let current: BundleInfo = self.implementation.getCurrentBundle()
+        self.implementation.sendStats(action: "app_moved_to_background", versionName: current.getVersionName())
         print("\(self.implementation.TAG) Check for pending update")
         let delayUpdatePreferences = UserDefaults.standard.string(forKey: DELAY_CONDITION_PREFERENCES) ?? "[]"
 

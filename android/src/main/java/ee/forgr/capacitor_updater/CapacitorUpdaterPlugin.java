@@ -55,7 +55,7 @@ public class CapacitorUpdaterPlugin
   private static final String channelUrlDefault =
     "https://api.capgo.app/channel_self";
 
-  private final String PLUGIN_VERSION = "4.35.0";
+  private final String PLUGIN_VERSION = "4.55.0";
   private static final String DELAY_CONDITION_PREFERENCES = "";
 
   private SharedPreferences.Editor editor;
@@ -63,6 +63,7 @@ public class CapacitorUpdaterPlugin
   private CapacitorUpdater implementation;
 
   private Integer appReadyTimeout = 10000;
+  private Integer counterActivityCreate = 0;
   private Boolean autoDeleteFailed = true;
   private Boolean autoDeletePrevious = true;
   private Boolean autoUpdate = false;
@@ -169,11 +170,12 @@ public class CapacitorUpdaterPlugin
       try {
         if (
           !"".equals(previous.getOriginalString()) &&
-          this.currentVersionNative.getMajor() > previous.getMajor()
+          !this.currentVersionNative.getOriginalString()
+            .equals(previous.getOriginalString())
         ) {
           Log.i(
             CapacitorUpdater.TAG,
-            "New native major version detected: " + this.currentVersionNative
+            "New native version detected: " + this.currentVersionNative
           );
           this.implementation.reset(true);
           final List<BundleInfo> installed = this.implementation.list();
@@ -782,9 +784,20 @@ public class CapacitorUpdaterPlugin
   }
 
   private Boolean _isAutoUpdateEnabled() {
+    final CapConfig config = CapConfig.loadDefault(this.getActivity());
+    String serverUrl = config.getServerUrl();
+    if (serverUrl != null && !"".equals(serverUrl)) {
+      // log warning autoupdate disabled when serverUrl is set
+      Log.w(
+        CapacitorUpdater.TAG,
+        "AutoUpdate is automatic disabled when serverUrl is set."
+      );
+    }
     return (
       CapacitorUpdaterPlugin.this.autoUpdate &&
-      !"".equals(CapacitorUpdaterPlugin.this.updateUrl)
+      !"".equals(CapacitorUpdaterPlugin.this.updateUrl) &&
+      serverUrl == null &&
+      !"".equals(serverUrl)
     );
   }
 
@@ -1163,7 +1176,12 @@ public class CapacitorUpdaterPlugin
   }
 
   public void appMovedToForeground() {
-    this._checkCancelDelay(true);
+    final BundleInfo current =
+      CapacitorUpdaterPlugin.this.implementation.getCurrentBundle();
+    CapacitorUpdaterPlugin.this.implementation.sendStats(
+        "app_moved_to_foreground",
+        current.getVersionName()
+      );
     if (CapacitorUpdaterPlugin.this._isAutoUpdateEnabled()) {
       this.backgroundDownload();
     }
@@ -1171,6 +1189,12 @@ public class CapacitorUpdaterPlugin
   }
 
   public void appMovedToBackground() {
+    final BundleInfo current =
+      CapacitorUpdaterPlugin.this.implementation.getCurrentBundle();
+    CapacitorUpdaterPlugin.this.implementation.sendStats(
+        "app_moved_to_background",
+        current.getVersionName()
+      );
     Log.i(CapacitorUpdater.TAG, "Checking for pending update");
     try {
       Gson gson = new Gson();
@@ -1226,17 +1250,28 @@ public class CapacitorUpdaterPlugin
   }
 
   private boolean isMainActivity() {
-    Context mContext = this.getContext();
-    ActivityManager activityManager =
-      (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-    List<ActivityManager.AppTask> runningTasks = activityManager.getAppTasks();
-    ActivityManager.RecentTaskInfo runningTask = runningTasks
-      .get(0)
-      .getTaskInfo();
-    String className = runningTask.baseIntent.getComponent().getClassName();
-    String runningActivity = runningTask.topActivity.getClassName();
-    boolean isThisAppActivity = className.equals(runningActivity);
-    return isThisAppActivity;
+    try {
+      Context mContext = this.getContext();
+      ActivityManager activityManager =
+        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+      List<ActivityManager.AppTask> runningTasks =
+        activityManager.getAppTasks();
+      ActivityManager.RecentTaskInfo runningTask = runningTasks
+        .get(0)
+        .getTaskInfo();
+      String className = runningTask.baseIntent.getComponent().getClassName();
+      String runningActivity = runningTask.topActivity.getClassName();
+      boolean isThisAppActivity = className.equals(runningActivity);
+      return isThisAppActivity;
+    } catch (final Exception e) {
+      Log.e(CapacitorUpdater.TAG, "Error getting Main Activity", e);
+      return false;
+    }
+  }
+
+  private void appKilled() {
+    Log.d(CapacitorUpdater.TAG, "onActivityDestroyed: all activity destroyed");
+    this._checkCancelDelay(true);
   }
 
   @Override
@@ -1276,6 +1311,7 @@ public class CapacitorUpdaterPlugin
     @Nullable final Bundle savedInstanceState
   ) {
     this.implementation.activity = activity;
+    this.counterActivityCreate++;
   }
 
   @Override
@@ -1289,5 +1325,9 @@ public class CapacitorUpdaterPlugin
   @Override
   public void onActivityDestroyed(@NonNull final Activity activity) {
     this.implementation.activity = activity;
+    counterActivityCreate--;
+    if (counterActivityCreate == 0) {
+      this.appKilled();
+    }
   }
 }
