@@ -342,14 +342,14 @@ public class CapacitorUpdater {
       this.flattenAssets(unzipped, idName);
       this.notifyDownload(id, 100);
       this.saveBundleInfo(id, null);
-      BundleInfo info = new BundleInfo(
+      BundleInfo next = new BundleInfo(
         id,
         version,
         BundleStatus.PENDING,
         new Date(System.currentTimeMillis()),
         checksum
       );
-      this.saveBundleInfo(id, info);
+      this.saveBundleInfo(id, next);
       if (
         checksumRes != null &&
         !checksumRes.isEmpty() &&
@@ -357,23 +357,23 @@ public class CapacitorUpdater {
       ) {
         Log.e(
           CapacitorUpdater.TAG,
-          "Error checksum " + info.getChecksum() + " " + checksum
+          "Error checksum " + next.getChecksum() + " " + checksum
         );
         this.sendStats("checksum_fail", getCurrentBundle().getVersionName());
-        final Boolean res = this.delete(info.getId());
+        final Boolean res = this.delete(id);
         if (res) {
           Log.i(
             CapacitorUpdater.TAG,
-            "Failed bundle deleted: " + info.getVersionName()
+            "Failed bundle deleted: " + next.getVersionName()
           );
         }
-        return;
+        throw new IOException("Checksum failed: " + id);
       }
       final JSObject ret = new JSObject();
-      ret.put("bundle", info.toJSON());
+      ret.put("bundle", next.toJSON());
       CapacitorUpdater.this.notifyListeners("updateAvailable", ret);
       if (setNext) {
-        this.setNextBundle(info.getId());
+        this.setNextBundle(next.getId());
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -1015,8 +1015,7 @@ public class CapacitorUpdater {
         result = new BundleInfo(trueId, null, BundleStatus.PENDING, "", "");
       }
     }
-
-    Log.d(TAG, "Returning info [" + trueId + "] " + result);
+    // Log.d(TAG, "Returning info [" + trueId + "] " + result);
     return result;
   }
 

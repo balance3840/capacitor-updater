@@ -219,7 +219,6 @@ extension CustomError: LocalizedError {
 
 @objc public class CapacitorUpdater: NSObject {
 
-    private let versionName: String = Bundle.main.versionName ?? ""
     private let versionCode: String = Bundle.main.versionCode ?? ""
     private let versionOs = UIDevice.current.systemVersion
     private let documentsDir: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -233,6 +232,7 @@ extension CustomError: LocalizedError {
 
     public let TAG: String = "✨  Capacitor-updater:"
     public let CAP_SERVER_PATH: String = "serverBasePath"
+    public var versionName: String = ""
     public var customId: String = ""
     public var PLUGIN_VERSION: String = ""
     public let timeout: Double = 20
@@ -755,7 +755,7 @@ extension CustomError: LocalizedError {
                 result = BundleInfo(id: trueId, version: "", status: BundleStatus.PENDING, checksum: "")
             }
         }
-        print("\(self.TAG) Returning info bundle [\(result.toString())]")
+        // print("\(self.TAG) Returning info bundle [\(result.toString())]")
         return result
     }
 

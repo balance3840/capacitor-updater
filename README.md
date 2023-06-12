@@ -130,7 +130,6 @@ Capacitor Updator works by unzipping a compiled app bundle to the native device 
 * [`current()`](#current)
 * [`reload()`](#reload)
 * [`setMultiDelay(...)`](#setmultidelay)
-* [`setDelay(...)`](#setdelay)
 * [`cancelDelay()`](#canceldelay)
 * [`getLatest()`](#getlatest)
 * [`setChannel(...)`](#setchannel)
@@ -163,6 +162,8 @@ notifyAppReady() => Promise<BundleInfo>
 ```
 
 Notify Capacitor Updater that the current bundle is working (a rollback will occur of this method is not called on every app launch)
+By default this method should be called in the first 10 sec after app launch, otherwise a rollback will occur.
+Change this behaviour with {@link appReadyTimeout}
 
 **Returns:** <code>Promise&lt;<a href="#bundleinfo">BundleInfo</a>&gt;</code>
 
@@ -298,23 +299,6 @@ Set <a href="#delaycondition">DelayCondition</a>, skip updates until one of the 
 | **`options`** | <code>{ delayConditions: DelayCondition[]; }</code> | are the {@link <a href="#delaycondition">DelayCondition</a>} list to set |
 
 **Since:** 4.3.0
-
---------------------
-
-
-### setDelay(...)
-
-```typescript
-setDelay(options: DelayCondition) => Promise<void>
-```
-
-Set <a href="#delaycondition">DelayCondition</a>, skip updates until the condition is met
-
-| Param         | Type                                                      | Description                                                        |
-| ------------- | --------------------------------------------------------- | ------------------------------------------------------------------ |
-| **`options`** | <code><a href="#delaycondition">DelayCondition</a></code> | is the {@link <a href="#delaycondition">DelayCondition</a>} to set |
-
-**Since:** 4.0.0
 
 --------------------
 

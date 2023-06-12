@@ -55,7 +55,7 @@ public class CapacitorUpdaterPlugin
   private static final String channelUrlDefault =
     "https://api.capgo.app/channel_self";
 
-  private final String PLUGIN_VERSION = "4.55.0";
+  private final String PLUGIN_VERSION = "5.0.1";
   private static final String DELAY_CONDITION_PREFERENCES = "";
 
   private SharedPreferences.Editor editor;
@@ -106,7 +106,8 @@ public class CapacitorUpdaterPlugin
           .getPackageManager()
           .getPackageInfo(this.getContext().getPackageName(), 0);
       this.implementation.activity = this.getActivity();
-      this.implementation.versionBuild = pInfo.versionName;
+      this.implementation.versionBuild =
+        this.getConfig().getString("version", pInfo.versionName);
       this.implementation.PLUGIN_VERSION = this.PLUGIN_VERSION;
       this.implementation.versionCode = Integer.toString(pInfo.versionCode);
       this.implementation.requestQueue =
@@ -144,7 +145,10 @@ public class CapacitorUpdaterPlugin
       CapacitorUpdater.TAG,
       "init for device " + this.implementation.deviceID
     );
-
+    Log.i(
+      CapacitorUpdater.TAG,
+      "version native " + this.currentVersionNative.getOriginalString()
+    );
     this.autoDeleteFailed =
       this.getConfig().getBoolean("autoDeleteFailed", true);
     this.autoDeletePrevious =
@@ -533,6 +537,9 @@ public class CapacitorUpdaterPlugin
                   if (res.has("error")) {
                     call.reject(res.getString("error"));
                     return;
+                  } else if (res.has("message")) {
+                    call.reject(res.getString("message"));
+                    return;
                   } else {
                     call.resolve(res);
                   }
@@ -668,33 +675,6 @@ public class CapacitorUpdaterPlugin
         e
       );
       return false;
-    }
-  }
-
-  @Deprecated
-  @PluginMethod
-  public void setDelay(final PluginCall call) {
-    try {
-      String kind = call.getString("kind");
-      String value = call.getString("value");
-      String delayConditions =
-        "[{\"kind\":\"" +
-        kind +
-        "\", \"value\":\"" +
-        (value != null ? value : "") +
-        "\"}]";
-      if (_setMultiDelay(delayConditions)) {
-        call.resolve();
-      } else {
-        call.reject("Failed to delay update");
-      }
-    } catch (final Exception e) {
-      Log.e(
-        CapacitorUpdater.TAG,
-        "Failed to delay update, [Error calling 'setDelay()']",
-        e
-      );
-      call.reject("Failed to delay update", e);
     }
   }
 
@@ -1250,23 +1230,20 @@ public class CapacitorUpdaterPlugin
   }
 
   private boolean isMainActivity() {
-    try {
-      Context mContext = this.getContext();
-      ActivityManager activityManager =
-        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-      List<ActivityManager.AppTask> runningTasks =
-        activityManager.getAppTasks();
-      ActivityManager.RecentTaskInfo runningTask = runningTasks
-        .get(0)
-        .getTaskInfo();
-      String className = runningTask.baseIntent.getComponent().getClassName();
-      String runningActivity = runningTask.topActivity.getClassName();
-      boolean isThisAppActivity = className.equals(runningActivity);
-      return isThisAppActivity;
-    } catch (final Exception e) {
-      Log.e(CapacitorUpdater.TAG, "Error getting Main Activity", e);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       return false;
     }
+    Context mContext = this.getContext();
+    ActivityManager activityManager =
+      (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+    List<ActivityManager.AppTask> runningTasks = activityManager.getAppTasks();
+    ActivityManager.RecentTaskInfo runningTask = runningTasks
+      .get(0)
+      .getTaskInfo();
+    String className = runningTask.baseIntent.getComponent().getClassName();
+    String runningActivity = runningTask.topActivity.getClassName();
+    boolean isThisAppActivity = className.equals(runningActivity);
+    return isThisAppActivity;
   }
 
   private void appKilled() {

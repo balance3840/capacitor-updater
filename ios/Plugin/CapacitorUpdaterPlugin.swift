@@ -15,7 +15,7 @@ import Version
 @objc(CapacitorUpdaterPlugin)
 public class CapacitorUpdaterPlugin: CAPPlugin {
     private var implementation = CapacitorUpdater()
-    private let PLUGIN_VERSION: String = "4.55.0"
+    private let PLUGIN_VERSION: String = "5.0.1"
     static let updateUrlDefault = "https://api.capgo.app/updates"
     static let statsUrlDefault = "https://api.capgo.app/stats"
     static let channelUrlDefault = "https://api.capgo.app/channel_self"
@@ -41,12 +41,14 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
         } catch {
             print("\(self.implementation.TAG) Cannot get version native \(currentVersionNative)")
         }
-        autoDeleteFailed = getConfigValue("autoDeleteFailed") as? Bool ?? true
-        autoDeletePrevious = getConfigValue("autoDeletePrevious") as? Bool ?? true
-        updateUrl = getConfigValue("updateUrl") as? String ?? CapacitorUpdaterPlugin.updateUrlDefault
-        autoUpdate = getConfigValue("autoUpdate") as? Bool ?? true
-        appReadyTimeout = getConfigValue("appReadyTimeout") as? Int ?? 10000
-        resetWhenUpdate = getConfigValue("resetWhenUpdate") as? Bool ?? true
+        print("\(self.implementation.TAG) version native \(self.currentVersionNative.description)")
+        implementation.versionName = getConfig().getString("version", Bundle.main.versionName)!
+        autoDeleteFailed = getConfig().getBoolean("autoDeleteFailed", true)
+        autoDeletePrevious = getConfig().getBoolean("autoDeletePrevious", true)
+        updateUrl = getConfig().getString("updateUrl", CapacitorUpdaterPlugin.updateUrlDefault)!
+        autoUpdate = getConfig().getBoolean("autoUpdate", true)
+        appReadyTimeout = getConfig().getInt("appReadyTimeout", 10000)
+        resetWhenUpdate = getConfig().getBoolean("resetWhenUpdate", true)
 
         implementation.privateKey = getConfig().getString("privateKey", self.defaultPrivateKey)!
         implementation.notifyDownload = notifyDownload
@@ -129,11 +131,12 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
                 if checksum != "" && next.getChecksum() != checksum {
                     print("\(self.implementation.TAG) Error checksum", next.getChecksum(), checksum)
                     self.implementation.sendStats(action: "checksum_fail", versionName: next.getVersionName())
-                    let resDel = self.implementation.delete(id: next.getId())
+                    let id = next.getId()
+                    let resDel = self.implementation.delete(id: id)
                     if !resDel {
-                        print("\(self.implementation.TAG) Delete failed, id \(next.getId()) doesn't exist")
+                        print("\(self.implementation.TAG) Delete failed, id \(id) doesn't exist")
                     }
-                    return
+                    throw ObjectSavableError.checksum
                 }
                 self.notifyListeners("updateAvailable", data: ["bundle": next.toJSON()])
                 call.resolve(next.toJSON())
@@ -232,6 +235,8 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
             let res = self.implementation.getLatest(url: URL(string: self.updateUrl)!)
             if res.error != nil {
                 call.reject( res.error!)
+            } else if res.message != nil {
+                call.reject( res.message!)
             } else {
                 call.resolve(res.toDict())
             }
@@ -328,18 +333,6 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
             return
         }
         let delayConditions: String = toJson(object: delayConditionList)
-        if _setMultiDelay(delayConditions: delayConditions) {
-            call.resolve()
-        } else {
-            call.reject("Failed to delay update")
-        }
-    }
-
-    @available(*, deprecated, message: "use SetMultiDelay instead")
-    @objc func setDelay(_ call: CAPPluginCall) {
-        let kind: String = call.getString("kind", "")
-        let value: String? = call.getString("value", "")
-        let delayConditions: String = "[{\"kind\":\"\(kind)\", \"value\":\"\(value ?? "")\"}]"
         if _setMultiDelay(delayConditions: delayConditions) {
             call.resolve()
         } else {
@@ -560,12 +553,13 @@ public class CapacitorUpdaterPlugin: CAPPlugin {
                     if res.checksum != "" && next.getChecksum() != res.checksum {
                         print("\(self.implementation.TAG) Error checksum", next.getChecksum(), res.checksum)
                         self.implementation.sendStats(action: "checksum_fail", versionName: next.getVersionName())
-                        let resDel = self.implementation.delete(id: next.getId())
+                        let id = next.getId()
+                        let resDel = self.implementation.delete(id: id)
                         if !resDel {
-                            print("\(self.implementation.TAG) Delete failed, id \(next.getId()) doesn't exist")
+                            print("\(self.implementation.TAG) Delete failed, id \(id) doesn't exist")
                         }
                         self.endBackGroundTask()
-                        return
+                        throw ObjectSavableError.checksum
                     }
                     self.notifyListeners("updateAvailable", data: ["bundle": next.toJSON()])
                     _ = self.implementation.setNextBundle(next: next.getId())
