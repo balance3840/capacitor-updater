@@ -1,5 +1,5 @@
 {
-  "name": "@capgo/capacitor-updater",
+  "name": "@restrella/capacitor-updater",
   "version": "7.0.52",
   "license": "MPL-2.0",
   "description": "Live update for capacitor apps",

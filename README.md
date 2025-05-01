@@ -270,7 +270,7 @@ In `capacitor.config.json`:
 In `capacitor.config.ts`:
 
 ```ts
-/// <reference types="@capgo/capacitor-updater" />
+/// <reference types="@restrella/capacitor-updater" />
 
 import { CapacitorConfig } from '@capacitor/cli';
 
