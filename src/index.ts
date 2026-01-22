@@ -3,12 +3,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
 import { registerPlugin } from '@capacitor/core';
+import './history';
 
 import type { CapacitorUpdaterPlugin } from './definitions';
 
-const CapacitorUpdater = registerPlugin<CapacitorUpdaterPlugin>('CapacitorUpdater', {
+const CapacitorUpdater: CapacitorUpdaterPlugin = registerPlugin<CapacitorUpdaterPlugin>('CapacitorUpdater', {
   web: () => import('./web').then((m) => new m.CapacitorUpdaterWeb()),
 });
 

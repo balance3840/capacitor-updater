@@ -7,31 +7,40 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  CapacitorUpdaterPlugin,
-  BundleInfo,
-  LatestVersion,
-  DelayCondition,
-  ChannelRes,
-  SetChannelOptions,
-  GetChannelRes,
-  SetCustomIdOptions,
-  UnsetChannelOptions,
-  StatsUrl,
-  UpdateUrl,
-  ChannelUrl,
-  DownloadOptions,
-  BundleId,
-  AutoUpdateEnabled,
-  DeviceId,
-  BuiltinVersion,
-  PluginVersion,
-  BundleListResult,
-  ResetOptions,
-  CurrentBundleResult,
   AppReadyResult,
+  AppUpdateInfo,
+  AppUpdateResult,
+  AutoUpdateEnabled,
+  BundleId,
+  BundleInfo,
+  BundleListResult,
+  CapacitorUpdaterPlugin,
+  ChannelRes,
+  ChannelUrl,
+  CurrentBundleResult,
+  DelayCondition,
+  DeviceId,
+  DownloadOptions,
+  GetAppUpdateInfoOptions,
+  GetChannelRes,
+  LatestVersion,
+  ListChannelsResult,
   MultiDelayConditions,
+  OpenAppStoreOptions,
+  PluginVersion,
+  ResetOptions,
+  SetChannelOptions,
+  SetCustomIdOptions,
+  StatsUrl,
+  UnsetChannelOptions,
+  UpdateUrl,
+  BuiltinVersion,
   AutoUpdateAvailable,
+  SetShakeMenuOptions,
+  ShakeMenuEnabled,
+  UpdateFailedEvent,
 } from './definitions';
+import { AppUpdateAvailability } from './definitions';
 
 const BUNDLE_BUILTIN: BundleInfo = {
   status: 'success',
@@ -96,6 +105,11 @@ export class CapacitorUpdaterWeb extends WebPlugin implements CapacitorUpdaterPl
     console.warn('Cannot delete bundle in web', options);
   }
 
+  async setBundleError(options: BundleId): Promise<BundleInfo> {
+    console.warn('Cannot setBundleError in web', options);
+    return BUNDLE_BUILTIN;
+  }
+
   async list(): Promise<BundleListResult> {
     console.warn('Cannot list bundles in web');
     return { bundles: [] };
@@ -149,8 +163,15 @@ export class CapacitorUpdaterWeb extends WebPlugin implements CapacitorUpdaterPl
     };
   }
 
+  async listChannels(): Promise<ListChannelsResult> {
+    console.warn('Cannot listChannels in web');
+    throw {
+      message: 'Cannot listChannels in web',
+      error: 'platform_not_supported',
+    };
+  }
+
   async notifyAppReady(): Promise<AppReadyResult> {
-    console.warn('Cannot notify App Ready in web');
     return { bundle: BUNDLE_BUILTIN };
   }
 
@@ -180,7 +201,58 @@ export class CapacitorUpdaterWeb extends WebPlugin implements CapacitorUpdaterPl
   }
 
   async getNextBundle(): Promise<BundleInfo | null> {
-    console.warn('Cannot get next bundle in web');
+    return Promise.resolve(null);
+  }
+
+  async getFailedUpdate(): Promise<UpdateFailedEvent | null> {
+    console.warn('Cannot getFailedUpdate in web');
     return null;
+  }
+
+  async setShakeMenu(_options: SetShakeMenuOptions): Promise<void> {
+    throw this.unimplemented('Shake menu not available on web platform');
+  }
+
+  async isShakeMenuEnabled(): Promise<ShakeMenuEnabled> {
+    return Promise.resolve({ enabled: false });
+  }
+
+  async getAppId(): Promise<{ appId: string }> {
+    console.warn('Cannot getAppId in web');
+    return { appId: 'default' };
+  }
+
+  async setAppId(options: { appId: string }): Promise<void> {
+    console.warn('Cannot setAppId in web', options);
+    return;
+  }
+
+  // ============================================================================
+  // App Store / Play Store Update Methods (Web stubs)
+  // ============================================================================
+
+  async getAppUpdateInfo(_options?: GetAppUpdateInfoOptions): Promise<AppUpdateInfo> {
+    console.warn('getAppUpdateInfo is not available on web platform');
+    return {
+      currentVersionName: '0.0.0',
+      currentVersionCode: '0',
+      updateAvailability: AppUpdateAvailability.UNKNOWN,
+    };
+  }
+
+  async openAppStore(_options?: OpenAppStoreOptions): Promise<void> {
+    throw this.unimplemented('openAppStore is not available on web platform');
+  }
+
+  async performImmediateUpdate(): Promise<AppUpdateResult> {
+    throw this.unimplemented('performImmediateUpdate is only available on Android');
+  }
+
+  async startFlexibleUpdate(): Promise<AppUpdateResult> {
+    throw this.unimplemented('startFlexibleUpdate is only available on Android');
+  }
+
+  async completeFlexibleUpdate(): Promise<void> {
+    throw this.unimplemented('completeFlexibleUpdate is only available on Android');
   }
 }

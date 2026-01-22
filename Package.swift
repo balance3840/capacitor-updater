@@ -3,18 +3,18 @@ import PackageDescription
 
 let package = Package(
     name: "CapgoCapacitorUpdater",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS("15.0")],
     products: [
         .library(
             name: "CapgoCapacitorUpdater",
             targets: ["CapacitorUpdaterPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.2.0"),
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.2")),
-        .package(url: "https://github.com/ZipArchive/ZipArchive.git", exact: "2.4.3"),
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.1"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.11.0")),
+        .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.20"),
         .package(url: "https://github.com/mrackwitz/Version.git", exact: "0.8.0"),
-        .package(url: "https://github.com/attaswift/BigInt.git", from: "5.5.1")
+        .package(url: "https://github.com/attaswift/BigInt.git", from: "5.7.0")
     ],
     targets: [
         .target(
@@ -22,16 +22,16 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
-                .product(name: "ZipArchive", package: "ZipArchive"),
+                .product(name: "ZIPFoundation", package: "ZIPFoundation"),
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "Version", package: "Version"),
                 .product(name: "BigInt", package: "BigInt")
             ],
-            path: "ios/Plugin"),
+            path: "ios/Sources/CapacitorUpdaterPlugin"),
         .testTarget(
             name: "CapacitorUpdaterPluginTests",
             dependencies: ["CapacitorUpdaterPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Tests/CapacitorUpdaterPluginTests")
     ],
     swiftLanguageVersions: [.v5]
 )
